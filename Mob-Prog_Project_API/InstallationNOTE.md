@@ -18,8 +18,8 @@ instead of using:
 So that Validator in RegisterController.php will run. 
 
 
-Register API: Verb: GET, URL:http://localhost:8000/api/register
-Login API: Verb: GET, URL:http://localhost:8000/api/login
+<!-- Register API: Verb: GET, URL:http://localhost:8000/api/register
+Login API: Verb: GET, URL:http://localhost:8000/api/login -->
 
 
 
@@ -35,7 +35,7 @@ Login API: Verb: GET, URL:http://localhost:8000/api/login
 
 
 - The ***migration*** (./database/migrations) is where you create a table along with its attributes.
-    - If we want to edit a tables that are already migrated, we cannot just   migrate it directly since in Laravel, what is currently migrated cannot be undo. So, we need to rollback before the **"migrate"** code. 
+    - If we want to edit a tables that are already migrated, we cannot just migrate it directly since in Laravel, what is currently migrated cannot be undo. So, we need to rollback before the **"migrate"** code. 
     > Edit of the table; could be adding, removing and/or modify, run the: 
         > php artisan migrate:rollback
         > php artisan migrate
@@ -43,6 +43,6 @@ Login API: Verb: GET, URL:http://localhost:8000/api/login
 
 - The ***models*** (./app/Models)  are used to interact with the database. Models represent and encapsulate the logic for the database's table, hence, if you I want to put rules on how the data is accessed in the database's table, this is where you put instructions. 
 
-- The Controllers  
+- The Controllers (./app/Http/Controllers) => this is where you manage your controllers by putting instructions on how the data is accessed. 
 
 
