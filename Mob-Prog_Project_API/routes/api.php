@@ -6,6 +6,7 @@ use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\StudentController;
 use App\Http\Controllers\API\UserController;
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -21,6 +22,8 @@ Route::post('/oauth/token', '\Laravel\Passport\Http\Controllers\AccessTokenContr
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
 Route::post('check-email-availability', [UserController::class, 'checkEmailAvailability']);
+    // Get user details after login
+Route::get('/user', [RegisterController::class, 'getUser']);
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     // return $request->user();
