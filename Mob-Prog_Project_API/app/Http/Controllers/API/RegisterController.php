@@ -13,15 +13,16 @@ use Illuminate\Database\QueryException;
 class RegisterController extends BaseController
 {
     /**
-    * Register api
-    *
-    * @return \Illuminate\Http\Response
-    */
+     * Register a new user.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function register(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'email' => 'required|email|unique:users,email', // Added unique validation
+            'email' => 'required|email|unique:users,email',
             'password' => 'required',
             'c_password' => 'required|same:password',
         ]);
@@ -30,43 +31,51 @@ class RegisterController extends BaseController
             return $this->sendError('Validation Error.', $validator->errors());
         }
 
-        $input = $request->all();
-        $input['password'] = bcrypt($input['password']);
-
         try {
-            $user = User::create($input);
-            $success['token'] = $user->createToken('MyApp')->accessToken;
-            $success['name'] = $user->name;
+            $user = User::create([
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'password' => bcrypt($request->input('password')),
+            ]);
 
-            return $this->sendResponse($success, 'User registered successfully.');
+            $token = $user->createToken('MyApp', ['name' => $user->name])->accessToken;
+
+            $response = [
+                'token' => $token,
+                'name' => $user->name,
+            ];
+
+            return $this->sendResponse($response, 'User registered successfully.');
         } catch (QueryException $e) {
-            // Check if the exception is due to a duplicate entry (email already taken)
             if (strpos($e->getMessage(), 'Duplicate entry') !== false) {
                 return $this->sendError('Email already taken.', [], JsonResponse::HTTP_CONFLICT);
             }
 
-            // Handle other exceptions as needed
             return $this->sendError('Registration failed.', [], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
     /**
-     * Login api
+     * Log in a user.
      *
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function login(Request $request): JsonResponse
     {
-        if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             /** @var \App\Models\MyUserModel $user **/
             $user = Auth::user();
-            $success['token'] =  $user->createToken('MyApp')-> accessToken;
-            $success['name'] =  $user->name;
+            $token = $user->createToken('MyApp')->accessToken;
 
-            return $this->sendResponse($success, 'User login successfully.');
-        }
-        else{
-            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+            $response = [
+                'token' => $token,
+                'name' => $user->name,
+            ];
+
+            return $this->sendResponse($response, 'User login successfully.');
+        } else {
+            return $this->sendError('Unauthorised.', ['error' => 'Unauthorised']);
         }
     }
 }
