@@ -18,7 +18,7 @@ use App\Http\Controllers\API\UserController;
 */
 Route::get('/student', [StudentController::class, 'index']); ///this is for student table route
 Route::post('/oauth/token', '\Laravel\Passport\Http\Controllers\AccessTokenController@issueToken');
-Route::post('registers', [RegisterController::class, 'register']);
+Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
 Route::post('check-email-availability', [UserController::class, 'checkEmailAvailability']);
 
