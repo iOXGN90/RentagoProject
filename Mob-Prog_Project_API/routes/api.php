@@ -21,8 +21,9 @@ Route::get('/student', [StudentController::class, 'index']); ///this is for stud
 Route::post('/oauth/token', '\Laravel\Passport\Http\Controllers\AccessTokenController@issueToken');
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
-Route::post('check-email-availability', [UserController::class, 'checkEmailAvailability']);
-    // Get user details after login
+// Route::post('check-email-availability', [UserController::class, 'checkEmailAvailability']);
+// Get user details after login
+Route::post('/logout', [RegisterController::class, 'logout'])->middleware('auth:api');
 Route::get('/user', [RegisterController::class, 'getUser']);
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
