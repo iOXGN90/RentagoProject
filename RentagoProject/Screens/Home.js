@@ -1,91 +1,94 @@
-import React from 'react'
-import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context'
+import React, { useState } from 'react';
+import { TouchableOpacity, View, Text, StyleSheet, Alert, ImageBackground, ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import NavigationBar from '../component/Navigation'
+import NavigationBar from '../component/homeNavigation';
 import axios from 'axios';
+import { Searchbar } from 'react-native-paper';
+import Content from './../component/featuredContent';
+import { useRoute } from '@react-navigation/native';
+
 
 const Home = () => {
-  const Navigation = useNavigation();
+  
+  
+  const navigation = useNavigation();
+  // const [userToken, setUserToken] = useState(null);
 
-  const goLogin = async () => {
-    try {
-      const YOUR_LOGOUT_API_ENDPOINT = 'http://192.168.1.5:3000/api/logout';
-      const YOUR_ACCESS_TOKEN = 'YOUR_ACCESS_TOKEN'; // Replace with your actual access token
+  const [searchQuery, setSearchQuery] = React.useState('');
 
-      const response = await axios.post(
-        YOUR_LOGOUT_API_ENDPOINT,
-        {},
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${YOUR_ACCESS_TOKEN}`,
-          },
-        }
-      );
+  const onChangeSearch = query => setSearchQuery(query);
 
-      if (response.status === 200) {
-        // Logout successful
-        Alert.alert('Logout', 'Logout successful');
-        // You can also clear local storage or AsyncStorage here
-        // navigation.navigate('Login'); // Redirect to login screen if needed
-      } else {
-        // Logout failed
-        Alert.alert('Logout', 'Logout failed');
-      }
-    } catch (error) {
-      console.error('Error during logout:', error);
-    }
-    // Navigation.navigate('Login');
-  };
-
+  const route = useRoute();
+  const tokenFromLogin = route.params?.token;
+  const test = route.params?.userInfo;
+  console.log(test);
+  
   return (
-    <SafeAreaView style={styles.Body}>
-    <NavigationBar/>
-    <View style={styles.upper}>
-      <Text style={styles.welcomeText}>
-        Welcome User!
-      </Text>
+    <View style={styles.body}>
+      <ImageBackground
+        source={require('./../assets/home/HomeBackground1.jpg')} // Replace with the actual path to your image
+        style={styles.imageBackground}
+        resizeMode="cover">
+        <NavigationBar token={tokenFromLogin}/>
+        <ScrollView style={styles.scrollingContent} showsVerticalScrollIndicator={false} >
+          <View style={styles.content}>
+            <View style={styles.searchBarContainer}>
+              <Searchbar placeholder="Search" onChangeText={onChangeSearch} style={styles.searchBarDesign} value={searchQuery}/>
+            </View>
+            <View style={styles.featuredContent}>
+              <Content/>
+            </View>
+          </View>
+        </ScrollView>
+      </ImageBackground>
     </View>
-    <View style={styles.lower}>
-      <TouchableOpacity style={styles.logoutButton} onPress={goLogin}>
-        <Text style={styles.logoutText}>
-          Logout
-        </Text>
-      </TouchableOpacity>
-    </View>
-    </SafeAreaView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
-  Body:{
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  upper:{
-    padding: 15,
-    margin: 20,
-  },
-  welcomeText:{
-    fontSize: 30,
-  },
-  lower:{
-    padding: 15,
-    margin: 20,
+  body:{
+    // futureUse
+    },
+  
+    scrollingContent:{
+    // futureUse
+      // height: "100%",
+    },
+  
+    content:{
+      width: "100%",
+      height: "auto",
+      alignItems:"center",
+      justifyContent: "center",
+      // backgroundColor: "gray",
+    },
+  
+    searchBarContainer:{
+      width: "95%",
+      height: 790,
+      // marginBottom: 200,
+      alignItems: "center",
+      justifyContent: "center",
+      // backgroundColor: "white",
+    },
+    searchBarDesign:{
+      width: "100%",
+      borderRadius: 50,
+      height: "10%",
+      elevation: 10,
+      marginBottom: "40%",
+    },
+    featuredContent:{
+      // backgroundColor: "blue",
+      height: 400,
+      // flexDirection:"row",
+    },
+      imageBackground:{
+        // position: 'absolute',
+        width: "100%",
+      },
+    }
+);
 
-  },
-  logoutButton:{
-    borderRadius: 25,
-    padding: 20,
-    backgroundColor: '#55bCF6',
-    elevation: 10,
-  },
-  logoutText:{
-    fontSize: 40,
-    color: 'white',
-  },
-})
-
-export default Home
+export default Home;

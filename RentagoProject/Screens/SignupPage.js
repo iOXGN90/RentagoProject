@@ -21,9 +21,10 @@ const SignupPage = () => {
 
   const handleSignup = async (values, { setSubmitting, setFieldError, resetForm }) => {
     try {
-      const response = await axios.post('http://192.168.1.5:3000/api/register', {
+      const response = await axios.post('http://192.168.1.4:3000/api/register', {
         name: values.name,
         email: values.email,
+        location: values.location,
         password: values.password,
         c_password: values.confirmPassword,
       });
@@ -65,6 +66,7 @@ const SignupPage = () => {
           initialValues={{
             name: '',
             email: '',
+            location: '',
             password: '',
             confirmPassword: '',
           }}
@@ -100,7 +102,17 @@ const SignupPage = () => {
                 onChangeText={handleChange('email')}
                 onBlur={handleBlur('email')}
               />
+
               {touched.email && errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
+              <TextInput
+                style={styles.signupTextInput}
+                label={"Location"}
+                autoCapitalize="sentences"
+                value={values.location}
+                onChangeText={handleChange('location')}
+                onBlur={handleBlur('location')}
+              />
+              {touched.location && errors.location && <Text style={styles.errorText}>{errors.location}</Text>}
 
               <TextInput
                 style={styles.signupTextInput}
@@ -112,6 +124,7 @@ const SignupPage = () => {
                 onBlur={handleBlur('password')}
                 require
               />
+
               {touched.password && errors.password && (
                 <Text style={styles.errorText}>{errors.password}</Text>
               )}

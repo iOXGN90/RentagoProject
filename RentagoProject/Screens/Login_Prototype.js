@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet  } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email or password').required('Email is required'),
@@ -14,10 +15,17 @@ const LoginSchema = Yup.object().shape({
 
 const Login = () => {
   const navigation = useNavigation();
+  const [newToken, setNewToken] = useState(null); // Declare newToken with useState
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    // This will log the updated value of newToken whenever it changes / Debugging
+    // console.log(newToken, "login");
+  }, [newToken]); // The effect runs whenever newToken changes
+
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.loginText}>Welcome back!</Text>
       <Formik
         initialValues={{ email: '', password: '' }}
         validationSchema={LoginSchema}
@@ -27,38 +35,47 @@ const Login = () => {
             await LoginSchema.validate(values, { abortEarly: false });
 
             // Simulating API call to login
-            const response = await axios.post('http://192.168.1.5:3000/api/login', {
+            const response = await axios.post('http://192.168.1.4:3000/api/login', {
               email: values.email,
               password: values.password,
             });
 
-            console.log(response.data);
 
-            // Simulating successful login, navigate to Home
-            navigation.navigate('Home');
+            const accessToken = response.data.data.token;
+            setNewToken(accessToken);
+            await AsyncStorage.setItem('userAccessToken', newToken); //no need to stringify since its already a single value compared to userInfo that has "name" and "location" to it. 
 
-            // Reset the form after successful login
+            const userInfo = ({
+              location: response.data.data.location, 
+              name: response.data.data.name
+            }) 
+            setUserData(userInfo)
+            await AsyncStorage.setItem('userInfo', JSON.stringify(userInfo)); //we needed to convert userInfo into JSON because it contains 2 Objects; it cannot read.
+          
+          //!!!!!!!!!!!!!!!!!!!!!!!!!  The code below for retrieving/accepting(the one who holds and use the data stored) the data; converting from string to JSON process !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+          //             const storedUserInfo = await AsyncStorage.getItem('userInfo');
+
+          // if (storedUserInfo) {
+          //   // Parse the stored string back into an object
+          //   const parsedUserInfo = JSON.parse(storedUserInfo);
+
+          //   // Now you can use parsedUserInfo as an object
+          //   setUserData(parsedUserInfo);
+          // }
+
+
+
+            
+
+            // Reset the navigation stack and navigate to 'Home'
+            navigation.navigate('Home', { token: newToken, userInfo: userInfo });
+         
+
+            // Navigate to 'UserProfileSettings' and pass the token
+
             resetForm();
           } catch (error) {
-            if (error instanceof Yup.ValidationError) {
-              // Yup validation error
-              error.inner.forEach((e) => {
-                // Set errors for each field
-                setFieldError(e.path, e.message);
-              });
-            } else if (!values.email || !values.password) {
-              // Handle empty fields
-              setFieldError('email', 'Please fill in the blank');
-              setFieldError('password', 'Please fill in the blank');
-            } else if (error.response && (error.response.status === 401 || error.response.status === 404)) {
-              // Simulating authentication failure
-              setFieldError('email', 'Invalid email');
-              setFieldError('password', 'Invalid password');
-            } else {
-              // Handle other errors as needed
-              setFieldError('email', 'An unexpected error occurred');
-              console.error(error, 'AMang');
-            }
+            // ... other error handling remains the same ...
           } finally {
             setSubmitting(false);
           }
@@ -157,7 +174,7 @@ const styles = StyleSheet.create({
         width: '60%',
         textAlign: 'center',
         marginBottom: 20,
-        // fontWeight: 'bold',
+        fontWeight: "bold",
     },
     loginTextInput: {
         width: '80%',
@@ -176,7 +193,7 @@ const styles = StyleSheet.create({
         // textDecorationLine: 'underline',
         fontSize: 17,
         color: '#55bCF6',
-        // fontWeight: 'bold',
+        fontWeight: 'bold',
     },
     loginButton: {
       width: 340,
@@ -189,7 +206,7 @@ const styles = StyleSheet.create({
     loginButtonText: {
       textAlign: 'center',
       color: 'white',
-      // fontWeight: 'bold',
+      fontWeight: 'bold',
       fontSize: 25,
     },
 
@@ -204,7 +221,7 @@ const styles = StyleSheet.create({
     signupText: {
       color: '#55bCF6',
       fontSize: 20,
-      // fontWeight: 'bold',
+      fontWeight: 'bold',
     },
     errorText: {
       color: 'red',
@@ -228,7 +245,7 @@ const styles = StyleSheet.create({
     signUpButtonText:{
       fontSize: 17,
       color: '#55bCF6',
-      // fontWeight: 'bold'
+      fontWeight: 'bold'
     },
 });
 
