@@ -16,9 +16,16 @@
 > npm install --save yup - Framework for login validator.
 > npm install expo@latest - To install latest version of React Native / Expo Go.
 > npm install expo@49 - To install the lastest SDK version (49 is the example).
-> npx expo install --fix - To update the dependencies to match the SDK version. 
+> npx expo install --fix - To update the dependencies to match the SDK version.
+>
+> 
 <pre>
 hello, this is
    just an     example
 ....
 </pre>
+
+The action of every agent <br />
+  into the world <br />
+starts <br />
+  from their physical selves. <br />
