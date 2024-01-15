@@ -1,8 +1,7 @@
 # LoginRegisterProject
 # Cabarrubias, Nevin Harold, D.
 
-> Disregard **LoginForm_Project and Mob-Prog_Project_API**
-
+Disregard **LoginForm_Project and Mob-Prog_Project_API** <br /> 
 
 <pre>
  Pre-requisites to install before downloading the file:
