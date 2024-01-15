@@ -6,17 +6,30 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { IconButton } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons'; // Import the appropriate icon
 import { useRoute } from '@react-navigation/native';
+
+
 const UserProfileScreen = () => {
     const route = useRoute();
+
     const tokenFromLogin = route.params?.token;
+    const userInfoFromLogin = route.params?.userInfo;
+
     const navigation = useNavigation();
+
+    const userName = userInfoFromLogin.name;
+    const userLocation = userInfoFromLogin.location;
+
+
 
     const handleBackPress = () => {
         navigation.goBack(); // Go back to the previous screen with the transition effect
     };
 
-    const handleSettings = () =>{
+    const handleSettings = () => {
+        // console.log('This is from userSettings: ' + tokenFromLogin + ' ' + JSON.stringify(userInfoFromLogin)) //This is for debugging
         navigation.navigate('UserProfileSetting',{token: tokenFromLogin});
+        // console.log(userName);
+        // console.log(userLocation);
     };
 
     return (
@@ -47,7 +60,7 @@ const UserProfileScreen = () => {
                 </View>
                 <View style={styles.userInformation}>
                     <Text style={styles.userName}>
-                        Nevin Harold D. Cabarrubias
+                        {userName}
                     </Text>
                     <View style={styles.companyWrapper}>
                         <Text style={styles.userRole}>
@@ -60,7 +73,7 @@ const UserProfileScreen = () => {
                     <View style={styles.userLocationWrapper}>
                         <Image source={require('../assets/profile/blue-user-location.png')} style={styles.userImageLocation}/>
                         <Text style={styles.userLocation}>
-                            Cagayan de Oro, City
+                            {userLocation}
                         </Text>
                     </View>
                     <View style={styles.userOption}>

@@ -7,8 +7,6 @@ import Icon from 'react-native-vector-icons/MaterialIcons'; // Import the approp
 import { useRoute } from '@react-navigation/native';
 import axios from 'axios';
 
-
-
 const UserProfileSettings = () => {
 
   const navigation = useNavigation();
@@ -16,11 +14,9 @@ const UserProfileSettings = () => {
   const handleBackPress = () => {
     navigation.goBack();
   };
-  
-  const route = useRoute();
-  
-  const userToken = route.params?.token;
 
+  const route = useRoute();
+  const userToken = route.params?.token;
 
   const handleLogout = async () => {
     try {
@@ -29,28 +25,42 @@ const UserProfileSettings = () => {
         Alert.alert('Error', 'Access token not found');
         return;
       }
-
-      const YOUR_LOGOUT_API_ENDPOINT = 'http://192.168.1.4:3000/api/logout';
-
-      const response = await axios.post(
-        YOUR_LOGOUT_API_ENDPOINT,
-        {},
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${userToken}`,
+      // Show a confirmation prompt before logging out
+      Alert.alert(
+        'Logout',
+        'Are you sure you want to logout?',
+        [
+          {
+            text: 'Cancel',
+            style: 'cancel',
           },
-        }
+          {
+            text: 'Yes',
+            onPress: async () => {
+              const YOUR_LOGOUT_API_ENDPOINT = 'http://192.168.1.4:3000/api/logout';
+              const response = await axios.post(
+                YOUR_LOGOUT_API_ENDPOINT,
+                {},
+                {
+                  headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${userToken}`,
+                  },
+                }
+              );
+              if (response.status === 200) {
+                Alert.alert('Logout', 'Logout successful');
+                // Optionally clear the userToken from state
+                // setUserToken(null);
+                navigation.navigate('Login');
+              } else {
+                Alert.alert('Logout', 'Logout failed');
+              }
+            },
+          },
+        ],
+        { cancelable: false }
       );
-
-      if (response.status === 200) {
-        Alert.alert('Logout', 'Logout successful');
-        // Optionally clear the userToken from state
-        // setUserToken(null);
-        navigation.navigate('Login');
-      } else {
-        Alert.alert('Logout', 'Logout failed');
-      }
     } catch (error) {
       console.error('Error during logout:', error);
     }

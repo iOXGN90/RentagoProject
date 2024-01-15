@@ -1,16 +1,19 @@
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Image, View, StyleSheet, Text, TouchableOpacity } from 'react-native'
-import {useNavigation} from '@react-navigation/native'
+import {useNavigation, useRoute} from '@react-navigation/native'
 
-const Navigation = ({token}) => {
+const Navigation = ({token, userInfo}) => {
     const navigation = useNavigation();
+    const route = useRoute();
     
-    const handleUserImagePress = () => {
 
-        navigation.navigate('UserProfile',{token : token})
+    const handleUserImagePress = () => {
+        navigation.navigate('UserProfile',{token : token, userInfo : userInfo})
+        // console.log('this is from home ' + JSON.stringify(userInfo)); //This is for debugging
+        // console.log('This is from Home ' + JSON.stringify(userInfo));
     }
-    
+
     return (
         <SafeAreaView style={styles.Container}>
             <View style={styles.leftNav}>

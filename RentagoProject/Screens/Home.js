@@ -21,8 +21,7 @@ const Home = () => {
 
   const route = useRoute();
   const tokenFromLogin = route.params?.token;
-  const test = route.params?.userInfo;
-  console.log(test);
+  const userInfoFromLogin = route.params?.userInfo;
   
   return (
     <View style={styles.body}>
@@ -30,7 +29,7 @@ const Home = () => {
         source={require('./../assets/home/HomeBackground1.jpg')} // Replace with the actual path to your image
         style={styles.imageBackground}
         resizeMode="cover">
-        <NavigationBar token={tokenFromLogin}/>
+        <NavigationBar token={tokenFromLogin} userInfo={userInfoFromLogin}/>
         <ScrollView style={styles.scrollingContent} showsVerticalScrollIndicator={false} >
           <View style={styles.content}>
             <View style={styles.searchBarContainer}>

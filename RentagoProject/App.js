@@ -12,23 +12,23 @@ import HomePage from './Screens/Home';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  return (
+return (
     <NavigationContainer>
-      <Stack.Navigator
+    <Stack.Navigator
         initialRouteName="Login"
         screenOptions={{
-          headerShown: false,
-          animation: 'slide_from_right', // Set the animation option
+        headerShown: false,
+        animation: 'slide_from_right', // Set the animation option
         }}
-      >
+    >
         <Stack.Screen name="Login" component={LoginPage} />
         <Stack.Screen name="Home" component={HomePage} />
         <Stack.Screen name="UserProfile" component={UserProfilePage} />
         <Stack.Screen name="UserProfileSetting" component={UserProfileSettingsPage} /> 
         <Stack.Screen name="SignUp" component={SignupPage}/>
         <Stack.Screen name="SignupConfirmation" component={SignupConfirmationPage}/>
-      </Stack.Navigator>
+    </Stack.Navigator>
     </NavigationContainer>
-  );
+);
 };
 

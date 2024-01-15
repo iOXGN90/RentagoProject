@@ -16,7 +16,7 @@ const LoginSchema = Yup.object().shape({
 const Login = () => {
   const navigation = useNavigation();
   const [newToken, setNewToken] = useState(null); // Declare newToken with useState
-  const [userData, setUserData] = useState(null);
+  // const [userData, setUserData] = useState(null);
 
   useEffect(() => {
     // This will log the updated value of newToken whenever it changes / Debugging
@@ -44,13 +44,17 @@ const Login = () => {
             const accessToken = response.data.data.token;
             setNewToken(accessToken);
             await AsyncStorage.setItem('userAccessToken', newToken); //no need to stringify since its already a single value compared to userInfo that has "name" and "location" to it. 
-
+            // console.log('This is from login ' + newToken);
+            
             const userInfo = ({
-              location: response.data.data.location, 
-              name: response.data.data.name
+              name: response.data.data.name,
+              location: response.data.data.location
             }) 
-            setUserData(userInfo)
-            await AsyncStorage.setItem('userInfo', JSON.stringify(userInfo)); //we needed to convert userInfo into JSON because it contains 2 Objects; it cannot read.
+            // setUserData(userInfo);
+            // await AsyncStorage.setItem('userInfo', userData); //This will convert userInfo into JSON because it contains 2 Objects; it cannot read.
+            // console.log('This is from login ' + JSON.stringify(userInfo));
+
+            navigation.navigate('Home', { token: newToken, userInfo: userInfo });
           
           //!!!!!!!!!!!!!!!!!!!!!!!!!  The code below for retrieving/accepting(the one who holds and use the data stored) the data; converting from string to JSON process !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
           //             const storedUserInfo = await AsyncStorage.getItem('userInfo');
@@ -63,19 +67,28 @@ const Login = () => {
           //   setUserData(parsedUserInfo);
           // }
 
-
-
-            
-
             // Reset the navigation stack and navigate to 'Home'
-            navigation.navigate('Home', { token: newToken, userInfo: userInfo });
-         
-
-            // Navigate to 'UserProfileSettings' and pass the token
-
             resetForm();
           } catch (error) {
-            // ... other error handling remains the same ...
+            if (error instanceof Yup.ValidationError) {
+              // Yup validation error
+              error.inner.forEach((e) => {
+                // Set errors for each field
+                setFieldError(e.path, e.message);
+              });
+            } else if (!values.email || !values.password) {
+              // Handle empty fields
+              setFieldError('email', 'Please fill in the blank');
+              setFieldError('password', 'Please fill in the blank');
+            } else if (error.response && (error.response.status === 401 || error.response.status === 404)) {
+              // Simulating authentication failure
+              setFieldError('email', 'Invalid email');
+              setFieldError('password', 'Invalid password');
+            } else {
+              // Handle other errors as needed
+              setFieldError('email', 'An unexpected error occurred');
+              console.error(error, '');
+            }
           } finally {
             setSubmitting(false);
           }
