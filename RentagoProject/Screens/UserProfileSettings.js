@@ -80,7 +80,7 @@ const UserProfileSettings = () => {
             </View>
             <View style={styles.centerNav}>
               <Text style={styles.headerText}>
-                  Settings
+                  asdasdadasdasd
               </Text>
             </View>
             <View style={styles.rightNav}>
