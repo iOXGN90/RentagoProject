@@ -21,7 +21,7 @@ const Navigation = ({token, userInfo}) => {
             </View>
             <View style={styles.rightNav}>
                 <TouchableOpacity onPress={handleUserImagePress} style={styles.userImageButton}>
-                    <Image source={require('../assets/home/Babyduck.jpg')} style={styles.userImage}/>
+                    <Image source={require('../assets/home/arthur.jpg')} style={styles.userImage}/>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>

@@ -56,7 +56,7 @@ const UserProfileScreen = () => {
             </View>
             <View style={styles.container}>
                 <View style={styles.imageWrapper}>
-                    <Image source={require('../assets/home/Babyduck.jpg')} style={styles.userImage}/>
+                    <Image source={require('../assets/home/arthur.jpg')} style={styles.userImage}/>
                 </View>
                 <View style={styles.userInformation}>
                     <Text style={styles.userName}>
