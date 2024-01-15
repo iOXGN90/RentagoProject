@@ -6,6 +6,8 @@
 
 
 <pre>
+ Pre-requisites to install before downloading the file:
+ 
 > npm install @react-navigation/native-stack - To be able to navigate through pages per pressed. <br />
 > npm install react-native-screens react-native-safe-area-context. <br />
 > npm install react-native-gesture-handler. <br />
@@ -18,6 +20,4 @@
 > npm install expo@49 - To install the lastest SDK version (49 is the example). <br />
 > npx expo install --fix - To update the dependencies to match the SDK version. <br />
 </pre>
-<br />
-<br />
 
