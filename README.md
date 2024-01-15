@@ -16,6 +16,7 @@
 > npm install axios - To be able to connect APIs such as laravel, etc. <br />
 > npm install formik --save - Framework for login form. <br />
 > npm install --save yup - Framework for login validator. <br />
+--------- Optional ----------  <br />
 > npm install expo@latest - To install latest version of React Native / Expo Go. <br />
 > npm install expo@49 - To install the lastest SDK version (49 is the example). <br />
 > npx expo install --fix - To update the dependencies to match the SDK version. <br />
