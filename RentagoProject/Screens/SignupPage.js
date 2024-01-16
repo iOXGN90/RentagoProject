@@ -1,7 +1,7 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, ActivityIndicator, StyleSheet } from 'react-native';
+import React, {useState} from 'react';
+import { View, Text, TouchableOpacity, ActivityIndicator, StyleSheet, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { IconButton, TextInput } from 'react-native-paper';
+import { IconButton, TextInput, Checkbox  } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -17,11 +17,11 @@ const SignupSchema = Yup.object().shape({
 });
 
 const SignupPage = () => {
-  const Navigation = useNavigation();
+  const navigation = useNavigation();
 
   const handleSignup = async (values, { setSubmitting, setFieldError, resetForm }) => {
     try {
-      const response = await axios.post('http://192.168.1.4:3000/api/register', {
+      const response = await axios.post('http://192.168.1.5:3000/api/register', {
         name: values.name,
         email: values.email,
         location: values.location,
@@ -30,10 +30,11 @@ const SignupPage = () => {
       });
 
       console.log(response.data);
-      Navigation.navigate('SignupConfirmation');
+      navigation.navigate('SignupConfirmation');
 
       // Reset the form to clear the text inputs
       resetForm();
+
     } catch (error) {
       if (error.response && (error.response.status === 404 || error.response.status === 409)) {
         // HTTP status 404 corresponds to Not Found (Email already taken)
@@ -49,11 +50,22 @@ const SignupPage = () => {
   };
 
   const goBack = () => {
-    Navigation.navigate('Login');
+    navigation.navigate('Login');
   };
+
+  // handling the terms and condition
+  const [isChecked, setChecked] = useState(false);
+  const handleCheck = () => {
+    setChecked(!isChecked);
+  };
+
+  const handleTermsAndCondition = () =>{
+    navigation.navigate('SignUpTermsAndCondtion');
+  }
 
   return (
     <SafeAreaView style={styles.Container}>
+    <ScrollView>
       <View style={styles.Header}>
         <TouchableOpacity onPress={goBack}>
           <IconButton icon={'arrow-left'} />
@@ -74,14 +86,7 @@ const SignupPage = () => {
           onSubmit={handleSignup}
         >
           {({
-            values,
-            errors,
-            touched,
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            isSubmitting,
-            resetForm, // Added resetForm from Formik
+            values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting, resetForm, // Added resetForm from Formik
           }) => (
             <View>
               <TextInput
@@ -96,23 +101,36 @@ const SignupPage = () => {
 
               <TextInput
                 style={styles.signupTextInput}
-                label={"Email"}
-                autoCapitalize="none"
-                value={values.email}
-                onChangeText={handleChange('email')}
-                onBlur={handleBlur('email')}
-              />
-
-              {touched.email && errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
-              <TextInput
-                style={styles.signupTextInput}
                 label={"Location"}
                 autoCapitalize="sentences"
                 value={values.location}
                 onChangeText={handleChange('location')}
                 onBlur={handleBlur('location')}
-              />
-              {touched.location && errors.location && <Text style={styles.errorText}>{errors.location}</Text>}
+                />{touched.location && errors.location && <Text style={styles.errorText}>{errors.location}</Text>}
+
+                <Text style={styles.signupTextInput}>
+                  role: student/landlord/student&landlord
+                </Text>
+
+              <TextInput
+                style={styles.signupTextInput}
+                label={"Role"}
+                autoCapitalize="sentences"
+                value={values.role}
+                onChangeText={handleChange('Role')}
+                onBlur={handleBlur('Location')}
+                />
+
+              {touched.role && errors.role && <Text style={styles.errorText}>{errors.role}</Text>}
+
+              <TextInput
+                style={styles.signupTextInput}
+                label={"Email"}
+                autoCapitalize="none"
+                value={values.email}
+                onChangeText={handleChange('email')}
+                onBlur={handleBlur('email')}
+              />{touched.email && errors.email && (<Text style={styles.errorText}>{errors.email}</Text>)}
 
               <TextInput
                 style={styles.signupTextInput}
@@ -123,11 +141,7 @@ const SignupPage = () => {
                 onChangeText={handleChange('password')}
                 onBlur={handleBlur('password')}
                 require
-              />
-
-              {touched.password && errors.password && (
-                <Text style={styles.errorText}>{errors.password}</Text>
-              )}
+              />{touched.password && errors.password && (<Text style={styles.errorText}>{errors.password}</Text>)}
 
               <TextInput
                 style={styles.signupTextInput}
@@ -137,28 +151,36 @@ const SignupPage = () => {
                 value={values.confirmPassword}
                 onChangeText={handleChange('confirmPassword')}
                 onBlur={handleBlur('confirmPassword')}
-              />
-              {touched.confirmPassword && errors.confirmPassword && (
-                <Text style={styles.errorText}>{errors.confirmPassword}</Text>
-              )}
+              />{touched.confirmPassword && errors.confirmPassword && (<Text style={styles.errorText}>{errors.confirmPassword}</Text>)}
 
-              {isSubmitting ? (
-                <ActivityIndicator color="white" />
-              ) : (
-                <TouchableOpacity
-                  style={styles.signupButton}
-                  onPress={handleSubmit}
-                  disabled={isSubmitting}
-                >
-                  <Text style={styles.signupText}>
-                    Sign up
+              <View style={styles.checkboxContainer}><Checkbox.Android status={isChecked ? 'checked' : 'unchecked'} onPress={handleCheck}/>
+                  <Text style={styles.checkboxLabel}>
+                    I agree to the 
                   </Text>
+                  <TouchableOpacity style={styles.checkboxLabelWrapper} onPress={handleTermsAndCondition}>
+                    <Text style={styles.checkboxLabelBlue}>
+                      Terms and Conditions
+                    </Text>
                 </TouchableOpacity>
-              )}
+              </View>
+                  {isSubmitting ? (
+                    <ActivityIndicator color="white" />
+                  ) : (
+                    <TouchableOpacity
+                      style={[styles.signupButton, { backgroundColor: isChecked ? '#55bCF6' : 'gray' }]}
+                      onPress={isChecked ? handleSubmit : null}
+                      disabled={!isChecked}
+                    >
+                      <Text style={styles.signupText}>
+                        Sign up
+                      </Text>
+                    </TouchableOpacity>
+                  )}
             </View>
           )}
         </Formik>
       </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -211,6 +233,28 @@ const styles = StyleSheet.create({
     marginTop: 10,
     textAlign: 'center',
   },
+  checkboxContainer: {
+    width: 340,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    // backgroundColor: "blue",
+  },
+  checkboxLabelWrapper:{
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+
+  checkboxLabel: {
+    // color: "blue",
+    // marginLeft: ,
+    fontSize: 16,
+  },
+  checkboxLabelBlue:{
+    color: "blue",
+    marginLeft: 2,
+    fontSize: 16,
+  }
 });
 
 export default SignupPage;

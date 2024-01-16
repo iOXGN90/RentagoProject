@@ -8,6 +8,7 @@ import UserProfilePage from './Screens/UserProfile';
 import UserProfileSettingsPage from './Screens/UserProfileSettings';
 import SignupConfirmationPage from './Screens/SignupPageConfirmation';
 import HomePage from './Screens/Home';
+import SignupTermsAndConditionPage from './Screens/SignupPageTermsAndAgreement'
 
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +27,7 @@ return (
         <Stack.Screen name="UserProfile" component={UserProfilePage} />
         <Stack.Screen name="UserProfileSetting" component={UserProfileSettingsPage} /> 
         <Stack.Screen name="SignUp" component={SignupPage}/>
+        <Stack.Screen name="SignUpTermsAndCondtion" component={SignupTermsAndConditionPage}/>
         <Stack.Screen name="SignupConfirmation" component={SignupConfirmationPage}/>
     </Stack.Navigator>
     </NavigationContainer>
