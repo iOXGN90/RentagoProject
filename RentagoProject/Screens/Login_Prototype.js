@@ -46,11 +46,15 @@ return (
             const userInfo = {
                 name: response.data.data.name,
                 location: response.data.data.location,
+                role: response.data.data.role,
+                contact_number: response.data.data.contact_number,
             };
-            
+
+            // console.log(response.data)
+
             navigation.navigate('Home', { token: accessToken, userInfo: userInfo });
             
-            resetForm();
+            // resetForm();
             } catch (error) {
             if (error instanceof Yup.ValidationError) {
                 error.inner.forEach((e) => {

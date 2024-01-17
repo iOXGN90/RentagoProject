@@ -22,6 +22,7 @@ class RegisterController extends BaseController
             'name' => 'required',
             'role' => 'required',
             'location' => 'required',
+            'contact_number' => 'required',
             'email' => 'required|email',
             'password' => 'required',
             'c_password' => 'required|same:password',
@@ -39,6 +40,7 @@ class RegisterController extends BaseController
         $success['role'] =  $user->role;
         $success['location'] =  $user->location;
         $success['email'] =  $user->email;
+        $success['contact_number'] =  $user->contact_number;
 
         return $this->sendResponse($success, 'User register successfully.');
     }
@@ -55,6 +57,8 @@ class RegisterController extends BaseController
             $success['token'] =  $user->createToken('MyApp')-> accessToken;
             $success['name'] =  $user->name;
             $success['location'] =  $user->location;
+            $success['role'] =  $user->role;
+            $success['contact_number'] =  $user->contact_number;
 
             return $this->sendResponse($success, 'User login successfully.');
         }

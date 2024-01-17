@@ -23,6 +23,7 @@ const SignupPage = () => {
     try {
       const response = await axios.post('http://192.168.1.5:3000/api/register', {
         name: values.name,
+        role: values.role,
         email: values.email,
         location: values.location,
         password: values.password,
@@ -77,8 +78,9 @@ const SignupPage = () => {
           style={styles.Container}
           initialValues={{
             name: '',
-            email: '',
+            role: '',
             location: '',
+            email: '',
             password: '',
             confirmPassword: '',
           }}
@@ -117,8 +119,8 @@ const SignupPage = () => {
                 label={"Role"}
                 autoCapitalize="sentences"
                 value={values.role}
-                onChangeText={handleChange('Role')}
-                onBlur={handleBlur('Location')}
+                onChangeText={handleChange('role')}
+                onBlur={handleBlur('role')}
                 />
 
               {touched.role && errors.role && <Text style={styles.errorText}>{errors.role}</Text>}

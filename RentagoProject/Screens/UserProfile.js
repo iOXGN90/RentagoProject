@@ -18,8 +18,11 @@ const UserProfileScreen = () => {
 
     const userName = userInfoFromLogin.name;
     const userLocation = userInfoFromLogin.location;
+    const userRole = userInfoFromLogin.role;
 
-
+    const handleSample = () =>{
+        console.log(userRole);
+    }
 
     const handleBackPress = () => {
         navigation.goBack(); // Go back to the previous screen with the transition effect
@@ -64,7 +67,7 @@ const UserProfileScreen = () => {
                     </Text>
                     <View style={styles.companyWrapper}>
                         <Text style={styles.userRole}>
-                            Student
+                            {userRole}
                         </Text>
                         <Text style={styles.userCompany}>
                             University of Science and Technology of Southern Philippines
@@ -77,7 +80,7 @@ const UserProfileScreen = () => {
                         </Text>
                     </View>
                     <View style={styles.userOption}>
-                        <TouchableOpacity style={styles.optionButton}>
+                        <TouchableOpacity style={styles.optionButton} onPress={handleSample}>
                             <Text style={styles.optionProfileText}>
                                 Edit Profile
                             </Text>
