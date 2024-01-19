@@ -48,9 +48,10 @@ return (
                 location: response.data.data.location,
                 role: response.data.data.role,
                 contact_number: response.data.data.contact_number,
+                id: response.data.data.id
             };
 
-            // console.log(response.data)
+            console.log('Welcome, user: ' + response.data.data.name)
 
             navigation.navigate('Home', { token: accessToken, userInfo: userInfo });
             
@@ -105,14 +106,16 @@ return (
                 <Text style={styles.loginButtonText}>Login</Text>
             </TouchableOpacity>
             <View style={styles.signupWrapper}>
-                <Text style={styles.signupInfo}>Don't have an account?</Text>
-                <TouchableOpacity
-                onPress={() => {
-                    resetForm();
-                    navigation.navigate('SignUp');
-                }}
+                <Text style={styles.signupInfo}>
+                    Don't have an account?
+                </Text>
+                <TouchableOpacity onPress={() => {
+                        resetForm(); navigation.navigate('SignUp');
+                    }}
                 >
-                <Text style={styles.signupText}>Sign up now!</Text>
+                <Text style={styles.signupText}>
+                    Sign up now!
+                </Text>
                 </TouchableOpacity>
             </View>
             </View>

@@ -3,14 +3,15 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { Image, View, StyleSheet, Text, TouchableOpacity } from 'react-native'
 import {useNavigation, useRoute} from '@react-navigation/native'
 
-const Navigation = ({token, userInfo}) => {
-    const navigation = useNavigation();
+const homeNavigation = ({token, userInfo}) => {
+    const Navigation = useNavigation();
     const route = useRoute();
     
 
     const handleUserImagePress = () => {
-        navigation.navigate('UserProfile',{token : token, userInfo : userInfo})
-        // console.log('this is from home ' + JSON.stringify(userInfo)); //This is for debugging
+        Navigation.navigate('UserProfile',{token : token, userInfo : userInfo})
+        // Navigation.navigate('GoogleMap',{userInfo : userInfo})
+        console.log('this is from home ' + JSON.stringify(userInfo.id)); //This is for debugging
         // console.log('This is from Home ' + JSON.stringify(userInfo));
     }
 
@@ -21,7 +22,7 @@ const Navigation = ({token, userInfo}) => {
             </View>
             <View style={styles.rightNav}>
                 <TouchableOpacity onPress={handleUserImagePress} style={styles.userImageButton}>
-                    <Image source={require('../assets/home/arthur.jpg')} style={styles.userImage}/>
+                    <Image source={require('../assets/navigation/account-circle.png')} style={styles.userImage}/>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>
@@ -64,4 +65,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default Navigation
+export default homeNavigation

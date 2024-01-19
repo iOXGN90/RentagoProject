@@ -1,17 +1,20 @@
 import React, { useState, useRef, useEffect } from 'react';
 import MapView, { PROVIDER_GOOGLE, Marker, Callout } from 'react-native-maps';
-import { Dimensions, StyleSheet, View, Text } from 'react-native';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import { GOOGLE_API_KEY } from './../enviroment.ts';
+import { Dimensions, StyleSheet, View, Text, Alert, Image, TouchableOpacity  } from 'react-native';
+import { GooglePlacesAutocomplete, GooglePlaceDetail } from 'react-native-google-places-autocomplete';
+import { GOOGLE_API_KEY } from './../enviroment'; // make environment.ts = API of googlemap; import 
 import Constants from 'expo-constants';
 import * as Location from 'expo-location';
+import { useNavigation } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRoute } from '@react-navigation/native';
+
 
 const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.02;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-
 
 
 type InputAutocompleteProps = {
@@ -45,9 +48,20 @@ function InputAutocomplete({
 }
 
 export default function App() {
+    const route = useRoute();
+    const userInfoFromLogin = route.params?.userInfo;
+
+    const handleTest = () =>{
+      console.log(userInfoFromLogin);
+    }
+
+
     const [markerPosition, setMarkerPosition] = useState({ latitude: 0, longitude: 0 });
     const mapRef = useRef(null);
   
+    const Navigation = useNavigation();
+
+
   useEffect(() => {
     // Get the device's current location and set it as the initial marker position
     (async () => {
@@ -70,18 +84,56 @@ export default function App() {
     })();
   }, []);
 
+
   const handleMapPress = (event) => {
     // Get the coordinates of the touch event
     const { coordinate } = event.nativeEvent;
-
+  
     // Update the marker position state
     setMarkerPosition(coordinate);
-
+  
     // Log the coordinates to the console
-    console.log('Marker Coordinates1:', coordinate.latitude);
-    console.log('Marker Coordinates2:', coordinate.longitude);
-  };
+    console.log('location:', coordinate);
+    
+    // Adjust the map zoom and center to the pressed location
+    mapRef.current.animateToRegion({
+      latitude: coordinate.latitude,
+      longitude: coordinate.longitude,
+      latitudeDelta: 0.02, // Adjust the desired zoom level
+      longitudeDelta: 0.02 * ASPECT_RATIO, // Adjust the desired zoom level
+    });
 
+
+    // Introduce a delay of 0.5 seconds
+    setTimeout(() => {
+      // Show an alert for confirmation
+      Alert.alert(
+        'Confirmation',
+        'Do you want to register this location?' + '\nLatitude: ' + JSON.stringify(coordinate.latitude) + '\nLongitude: ' + JSON.stringify(coordinate.longitude),
+        [
+          {
+            text: 'No',
+            style: 'cancel',
+            onPress: () => {
+              console.log('Registration Cancelled')
+            },
+          },
+          {
+            text: 'Yes',
+            onPress: () => {
+              // Handle registration logic here
+              // console.log('Location pending for register:', coordinate);
+              Navigation.navigate('GoogleMapRegisterImage', {
+                coordinate : coordinate,  
+                userInfo : userInfoFromLogin,
+              });
+            },
+          },
+        ]
+      );
+    }, 1500); // 1000 milliseconds (1 second)
+  };
+  
   const handlePlaceSelected = (details) => {
     if (details && details.geometry && details.geometry.location) {
       const { location } = details.geometry;
@@ -98,7 +150,7 @@ export default function App() {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.mapContainer}>
         <MapView
           ref={mapRef}
@@ -119,9 +171,15 @@ export default function App() {
         </MapView>
       </View>
       <View style={styles.searchContainer}>
-        <InputAutocomplete label='Place to register' placeholder='Search..' onPlaceSelected={handlePlaceSelected} />
+        <InputAutocomplete placeholder='Search a place to register...' onPlaceSelected={handlePlaceSelected}/>
+        <TouchableOpacity onPress={handleTest}>
+        {/* <Text>test</Text> */}
+      </TouchableOpacity>
       </View>
-    </View>
+      <View style={styles.imageWrapper}>
+        <Image style={styles.imageRentago} source={require('./../assets/rentago.png')}/>
+      </View>
+    </SafeAreaView>
   );
 }
 
@@ -136,25 +194,39 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
   },
+  imageWrapper: {
+    position: 'absolute',
+    bottom: -59,
+    right: Constants.rightOffset,
+    width: '100%',
+    height: 'auto',
+    flexDirection: 'row-reverse',
+  },
+
+  imageRentago:{
+    height: 150,
+    width: 100,
+  },
+
   map: {
     flex: 1,
   },
   searchContainer: {
     position: 'absolute',
-    width: '90%',
+    width: '95%',
     backgroundColor: 'white',
-    shadowColor: 'black',
-    elevation: 5,
-    padding: 8,
-    borderRadius: 8,
-    borderWidth: 0.5,
+    borderColor: 'gray',
+    shadowColor: "#05a3fc",
+    elevation: 10,
+    padding: 20,
+    borderRadius: 30,
+    borderWidth: 0.4,
     top: Constants.statusBarHeight,
   },
   input: {
-    borderColor: '#888',
-    borderWidth: 1,
-    borderRadius: 5,
-    padding: 10,
-    marginTop: 5,
+    borderColor: 'gray',
+    borderWidth: 0.3,
+    borderRadius: 20,
+    // marginBottom: 20,
   },
 });

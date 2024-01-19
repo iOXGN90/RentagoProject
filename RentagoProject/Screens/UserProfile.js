@@ -1,6 +1,6 @@
 // UserProfileScreen.js
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { IconButton } from 'react-native-paper';
@@ -14,24 +14,47 @@ const UserProfileScreen = () => {
     const tokenFromLogin = route.params?.token;
     const userInfoFromLogin = route.params?.userInfo;
 
-    const navigation = useNavigation();
+    const Navigation = useNavigation();
 
     const userName = userInfoFromLogin.name;
     const userLocation = userInfoFromLogin.location;
     const userRole = userInfoFromLogin.role;
 
-    const handleSample = () =>{
-        console.log(userRole);
-    }
+    const userID = userInfoFromLogin.id;
+
+    const handleSample = () => {
+        // Display an alert to ask for location permission
+        Alert.alert(
+          'Location Permission',
+          'This feature will use your current location.',
+          [
+            {
+              text: 'Cancel',
+              style: 'cancel',
+              onPress: () => {
+                console.log('Location permission denied');
+              },
+            },
+            {
+              text: 'Allow',
+              onPress: async () => {
+                console.log('Location permission granted');
+                // Continue with the logic, e.g., navigating to 'GoogleMap'
+                Navigation.navigate('GoogleMap', {userInfo : userInfoFromLogin});
+              },
+            },
+          ]
+        );
+      };
 
     const handleBackPress = () => {
-        navigation.goBack(); // Go back to the previous screen with the transition effect
+        Navigation.goBack(); // Go back to the previous screen with the transition effect
     };
 
     const handleSettings = () => {
+        Navigation.navigate('UserProfileSetting',{token: tokenFromLogin});
         // console.log('This is from userSettings: ' + tokenFromLogin + ' ' + JSON.stringify(userInfoFromLogin)) //This is for debugging
-        navigation.navigate('UserProfileSetting',{token: tokenFromLogin});
-        // console.log(userName);
+        // console.log(userID);
         // console.log(userLocation);
     };
 
@@ -82,7 +105,12 @@ const UserProfileScreen = () => {
                     <View style={styles.userOption}>
                         <TouchableOpacity style={styles.optionButton} onPress={handleSample}>
                             <Text style={styles.optionProfileText}>
-                                Edit Profile
+                                Test
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.optionButton} onPress={handleSample}>
+                            <Text style={styles.optionProfileText}>
+                                Register a place
                             </Text>
                         </TouchableOpacity>
                     </View>

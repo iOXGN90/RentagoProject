@@ -59,6 +59,7 @@ class RegisterController extends BaseController
             $success['location'] =  $user->location;
             $success['role'] =  $user->role;
             $success['contact_number'] =  $user->contact_number;
+            $success['id'] = $user->id;
 
             return $this->sendResponse($success, 'User login successfully.');
         }

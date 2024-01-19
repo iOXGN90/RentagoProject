@@ -10,8 +10,8 @@ import SignupConfirmationPage from './Screens/SignupPageConfirmation';
 import HomePage from './Screens/Home';
 import SignupTermsAndConditionPage from './Screens/SignupPageTermsAndAgreement';
 import GoogleMapPage from './Screens/GoogleMap';
-
-
+// import GoogleMapRegistration from './Screens/GoogleMap_Registration/GoogleRegistrationMap'
+import GoogleMapRegisterImage from './Screens/GoogleMap_Registration/GoogleMapRegisterImage'
 
 const Stack = createNativeStackNavigator();
 
@@ -19,7 +19,7 @@ export default function App() {
 return (
     <NavigationContainer>
     <Stack.Navigator
-        initialRouteName="GoogleMap"
+        initialRouteName="Login"
         screenOptions={{
         headerShown: false,
         animation: 'slide_from_right', // Set the animation option
@@ -28,6 +28,7 @@ return (
         <Stack.Screen name="Login" component={LoginPage} />
         <Stack.Screen name="Home" component={HomePage} />
         <Stack.Screen name="GoogleMap" component={GoogleMapPage} />
+        <Stack.Screen name="GoogleMapRegisterImage" component={GoogleMapRegisterImage} />
         <Stack.Screen name="UserProfile" component={UserProfilePage} />
         <Stack.Screen name="UserProfileSetting" component={UserProfileSettingsPage} /> 
         <Stack.Screen name="SignUp" component={SignupPage}/>
