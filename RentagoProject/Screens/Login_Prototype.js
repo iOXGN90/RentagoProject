@@ -25,7 +25,7 @@ return (
     <SafeAreaView style={styles.container}>
         <View style={styles.imageWrapper}>
             <Image 
-                source={require('../assets/Login/rentago.png')} 
+                source={require('../assets/Login/HD_Logo.png')} 
                 style={styles.loginImage}
             />
         </View>
@@ -40,6 +40,7 @@ return (
                 password: values.password,
             });
             const accessToken = response.data.data.token;
+            // console.log(accessToken)
             setNewToken(accessToken);
             await AsyncStorage.setItem('userAccessToken', accessToken);
 

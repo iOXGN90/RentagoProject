@@ -11,7 +11,7 @@ const homeNavigation = ({token, userInfo}) => {
     const handleUserImagePress = () => {
         Navigation.navigate('UserProfile',{token : token, userInfo : userInfo})
         // Navigation.navigate('GoogleMap',{userInfo : userInfo})
-        console.log('this is from home ' + JSON.stringify(userInfo.id)); //This is for debugging
+        // console.log('this is from home ' + JSON.stringify(userInfo.id)); //This is for debugging
         // console.log('This is from Home ' + JSON.stringify(userInfo));
     }
 

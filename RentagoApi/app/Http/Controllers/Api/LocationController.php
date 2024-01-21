@@ -19,6 +19,7 @@ class LocationController extends Controller
             'lat' => 'required|numeric',
             'address' => 'required',
             'description' => 'required',
+            'price' => 'required',
             'url.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048|required',
         ]);
 
@@ -32,6 +33,14 @@ class LocationController extends Controller
         $location->address = $request->address;
         $location->description = $request->description;
         $location->user_id = $request->user_id;
+        $location->price = $request->price;
+
+
+        $success['long'] =  $location->long;
+        $success['lat'] =  $location->lat;
+        $success['address'] =  $location->address;
+        $success['description'] =  $location->description;
+        $success['price'] =  $location->price;
 
         $location->save();
 
@@ -56,6 +65,8 @@ class LocationController extends Controller
             'location' => $location,
             'multiImage' => $multi_image,
         ];
+
+        $responseData['Successfully Registered!'] = $success;
 
         return response()->json($responseData, 200);
     }

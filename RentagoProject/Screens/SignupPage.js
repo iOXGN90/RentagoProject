@@ -14,6 +14,8 @@ const SignupSchema = Yup.object().shape({
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('password'), null], 'Passwords must match')
     .required('Confirm Password is required'),
+  contact_number: Yup.string().required('Contact Number is required'),
+
 });
 
 const SignupPage = () => {
@@ -25,6 +27,7 @@ const SignupPage = () => {
         name: values.name,
         role: values.role,
         email: values.email,
+        contact_number: values.contact_number,
         location: values.location,
         password: values.password,
         c_password: values.confirmPassword,
@@ -79,6 +82,7 @@ const SignupPage = () => {
           initialValues={{
             name: '',
             role: '',
+            contact_number: '',
             location: '',
             email: '',
             password: '',
@@ -113,7 +117,6 @@ const SignupPage = () => {
                 <Text style={styles.signupTextInput}>
                   role: student/landlord/student&landlord
                 </Text>
-
               <TextInput
                 style={styles.signupTextInput}
                 label={"Role"}
@@ -122,9 +125,18 @@ const SignupPage = () => {
                 onChangeText={handleChange('role')}
                 onBlur={handleBlur('role')}
                 />
-
               {touched.role && errors.role && <Text style={styles.errorText}>{errors.role}</Text>}
 
+            
+              <TextInput
+                style={styles.signupTextInput}
+                label={"Contact Number"}
+                autoCapitalize="none"
+                keyboardType="phone-pad"
+                value={values.contact_number}
+                onChangeText={handleChange('contact_number')}
+                onBlur={handleBlur('contact_number')}
+              />{touched.contact_number && errors.contact_number && (<Text style={styles.errorText}>{errors.contact_number}</Text>)}
               <TextInput
                 style={styles.signupTextInput}
                 label={"Email"}

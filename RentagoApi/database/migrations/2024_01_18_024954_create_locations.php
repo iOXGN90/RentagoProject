@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('lat')->nullable();
             $table->string('address')->nullable();
             $table->string('description')->nullable();
+            $table->string('price')->nullable();
             $table->timestamps();
         });
     }

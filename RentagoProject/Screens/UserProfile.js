@@ -19,6 +19,7 @@ const UserProfileScreen = () => {
     const userName = userInfoFromLogin.name;
     const userLocation = userInfoFromLogin.location;
     const userRole = userInfoFromLogin.role;
+    const userContactNumber = userInfoFromLogin.contact_number;
 
     const userID = userInfoFromLogin.id;
 
@@ -87,6 +88,12 @@ const UserProfileScreen = () => {
                 <View style={styles.userInformation}>
                     <Text style={styles.userName}>
                         {userName}
+                    </Text>
+                    <Text>
+                        Contact Number:
+                    </Text>
+                    <Text style={styles.userName}>
+                        {userContactNumber}
                     </Text>
                     <View style={styles.companyWrapper}>
                         <Text style={styles.userRole}>

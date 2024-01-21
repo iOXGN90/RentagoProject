@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('multi_images', function (Blueprint $table) {
             $table->id();
             $table->integer('location_id');
-            $table->string('url')->nullable();
+            $table->json('url')->nullable();
             $table->timestamps();
         });
     }

@@ -38,6 +38,7 @@ const UserProfileSettings = () => {
             text: 'Yes',
             onPress: async () => {
               const YOUR_LOGOUT_API_ENDPOINT = 'http://192.168.1.5:3000/api/logout';
+              console.log('Token Deleted: ' + userToken)
               const response = await axios.post(
                 YOUR_LOGOUT_API_ENDPOINT,
                 {},
