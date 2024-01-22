@@ -116,6 +116,13 @@ export default function App() {
     }, 1500);
   };
 
+  const INITIAL_POSITION = {
+    latitude: 8.4803,
+    longitude: 124.6498,
+    latitudeDelta: LATITUDE_DELTA,
+    longitudeDelta: LONGITUDE_DELTA,
+  };
+
   const handlePlaceSelected = (details) => {
     if (details && details.geometry && details.geometry.location) {
       const { location } = details.geometry;
@@ -137,6 +144,7 @@ export default function App() {
           style={styles.map}
           provider={PROVIDER_GOOGLE}
           onPress={handleMapPress}
+          initialRegion={INITIAL_POSITION}
         >
           {markerPosition.latitude !== 0 && markerPosition.longitude !== 0 && (
             <Marker coordinate={markerPosition} title="Red Marker" pinColor="red">
