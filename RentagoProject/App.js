@@ -11,7 +11,7 @@ import HomePage from './Screens/Home';
 import SignupTermsAndConditionPage from './Screens/SignupPageTermsAndAgreement';
 import GoogleMapRegisterSelectPlace from './Screens/GoogleMapRegisterSelectPlace';
 // import GoogleMapRegistration from './Screens/GoogleMap_Registration/GoogleRegistrationMap'
-import GoogleMapRegisterImage from './Screens/GoogleMapRegisterImage'
+import GoogleMapRegisterInformation from './Screens/GoogleMapRegisterInformation'
 import GoogleMapSearch from './Screens/GoogleMapSearch'
 
 const Stack = createNativeStackNavigator();
@@ -29,7 +29,7 @@ return (
         <Stack.Screen name="Login" component={LoginPage} />
         <Stack.Screen name="Home" component={HomePage} />
         <Stack.Screen name="GoogleMap" component={GoogleMapRegisterSelectPlace} />
-        <Stack.Screen name="GoogleMapRegisterImage" component={GoogleMapRegisterImage} />
+        <Stack.Screen name="GoogleMapRegisterInformation" component={GoogleMapRegisterInformation} />
         <Stack.Screen name="GoogleMapSearch" component={GoogleMapSearch} />
         <Stack.Screen name="UserProfile" component={UserProfilePage} />
         <Stack.Screen name="UserProfileSetting" component={UserProfileSettingsPage} /> 
@@ -38,6 +38,6 @@ return (
         <Stack.Screen name="SignupConfirmation" component={SignupConfirmationPage}/>
     </Stack.Navigator>
     </NavigationContainer>
-);
+    );
 };
 

@@ -105,7 +105,7 @@ export default function App() {
           {
             text: 'Yes',
             onPress: () => {
-              Navigation.navigate('GoogleMapRegisterImage', {
+              Navigation.navigate('GoogleMapRegisterInformation', {
                 coordinate: coordinate,
                 userInfo: userInfoFromLogin,
               });

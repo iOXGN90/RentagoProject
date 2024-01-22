@@ -71,7 +71,7 @@ const SignupPageTermsAndAgreement = () => {
 const styles = StyleSheet.create({
     Header: {
         height: '5%',
-      },
+    },
 })
 
 export default SignupPageTermsAndAgreement
