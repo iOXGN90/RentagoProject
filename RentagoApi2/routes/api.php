@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\LocationController;
+use App\Http\Controllers\API\UserController;
 
 
 /*
@@ -22,3 +23,4 @@ Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
 Route::post('/logout', [RegisterController::class,'logout'])->middleware('auth:api');;
 Route::post('store-location', [LocationController::class, 'storeLocation']);
+Route::get('profile/{id}', [UserController::class, 'profile']);

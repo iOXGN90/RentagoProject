@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Support\Facades\Auth;
@@ -9,11 +10,18 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-
 class LocationController extends Controller
 {
-    public function storeLocation(Request $request){
+    public function storeLocation(Request $request)
+    {
+        // Ensure the user is authenticated
+        // $user = Auth::user();
 
+        // if (!$user) {
+        //     return response()->json(['error' => 'Unauthorized.'], JsonResponse::HTTP_UNAUTHORIZED);
+        // }
+
+        // Validation rules
         $validator = Validator::make($request->all(), [
             'long' => 'required|numeric',
             'lat' => 'required|numeric',
@@ -23,27 +31,22 @@ class LocationController extends Controller
             'url.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048|required',
         ]);
 
-        if ($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
+        // Check for validation failure
+        if ($validator->fails()) {
+            return response()->json(['error' => ['message' => 'Validation Error', 'details' => $validator->errors()]], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
         }
 
+        // Create Location
         $location = new Location();
         $location->long = $request->long;
         $location->lat = $request->lat;
         $location->address = $request->address;
         $location->description = $request->description;
-        $location->user_id = $request->user_id;
+        $location->user_id = $request->user_id; // Use authenticated user's ID
         $location->price = $request->price;
-
-
-        $success['long'] =  $location->long;
-        $success['lat'] =  $location->lat;
-        $success['address'] =  $location->address;
-        $success['description'] =  $location->description;
-        $success['price'] =  $location->price;
-
         $location->save();
 
+        // Save images
         $location_id = $location->id;
         $multi_image = new MultiImage();
         $imagePaths = [];
@@ -54,20 +57,17 @@ class LocationController extends Controller
             $imagePaths[] = 'storage/images/' . $imageName;
         }
 
+        // Save MultiImage
         $multi_image->url = json_encode($imagePaths);
-
         $multi_image->location_id = $location_id;
         $multi_image->save();
 
-        // dd($imagePaths);
-
+        // Response data
         $responseData = [
             'location' => $location,
             'multiImage' => $multi_image,
         ];
 
-        $responseData['Successfully Registered!'] = $success;
-
-        return response()->json($responseData, 200);
+        return response()->json(['data' => $responseData, 'message' => 'Successfully Registered!'], JsonResponse::HTTP_OK);
     }
 }

@@ -10,9 +10,11 @@ import SignupConfirmationPage from './Screens/SignupPageConfirmation';
 import HomePage from './Screens/Home';
 import SignupTermsAndConditionPage from './Screens/SignupPageTermsAndAgreement';
 import GoogleMapRegisterSelectPlace from './Screens/GoogleMapRegisterSelectPlace';
-// import GoogleMapRegistration from './Screens/GoogleMap_Registration/GoogleRegistrationMap'
+import GoogleMapRegisterImage from './Screens/GoogleMapRegisterImage';
 import GoogleMapRegisterInformation from './Screens/GoogleMapRegisterInformation'
-import GoogleMapSearch from './Screens/GoogleMapSearch'
+import GoogleMapSearch from './Screens/GoogleMapSearch';
+import sample from './Screens/sample'
+import Test from './Screens/Test'
 
 const Stack = createNativeStackNavigator();
 
@@ -20,19 +22,22 @@ export default function App() {
 return (
     <NavigationContainer>
     <Stack.Navigator
-        initialRouteName="Login"
+        initialRouteName="GoogleMapRegisterImage"
         screenOptions={{
         headerShown: false,
         animation: 'slide_from_right', // Set the animation option
         }}
     >
+        <Stack.Screen name="Test" component={Test} />
+        <Stack.Screen name="Sample" component={sample} />
         <Stack.Screen name="Login" component={LoginPage} />
         <Stack.Screen name="Home" component={HomePage} />
-        <Stack.Screen name="GoogleMap" component={GoogleMapRegisterSelectPlace} />
+        <Stack.Screen name="GoogleMapRegister" component={GoogleMapRegisterSelectPlace} />
         <Stack.Screen name="GoogleMapRegisterInformation" component={GoogleMapRegisterInformation} />
-        <Stack.Screen name="GoogleMapSearch" component={GoogleMapSearch} />
-        <Stack.Screen name="UserProfile" component={UserProfilePage} />
-        <Stack.Screen name="UserProfileSetting" component={UserProfileSettingsPage} /> 
+        <Stack.Screen name="GoogleMapRegisterImage" component={GoogleMapRegisterImage} />
+        <Stack.Screen name="GoogleMapSearch" component={GoogleMapSearch}/>
+        <Stack.Screen name="UserProfile" component={UserProfilePage}/>
+        <Stack.Screen name="UserProfileSetting" component={UserProfileSettingsPage}/> 
         <Stack.Screen name="SignUp" component={SignupPage}/>
         <Stack.Screen name="SignUpTermsAndCondtion" component={SignupTermsAndConditionPage}/>
         <Stack.Screen name="SignupConfirmation" component={SignupConfirmationPage}/>

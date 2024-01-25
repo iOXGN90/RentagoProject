@@ -26,27 +26,27 @@ const UserProfileScreen = () => {
     const handleSample = () => {
         // Display an alert to ask for location permission
         Alert.alert(
-          'Location Permission',
-          'This feature will use your current location.',
-          [
+            'Location Permission',
+            'This feature will use your current location.',
+            [
             {
-              text: 'Cancel',
-              style: 'cancel',
-              onPress: () => {
-                console.log('Location permission denied');
-              },
+                text: 'Cancel',
+                style: 'cancel',
+                onPress: () => {
+                    console.log('Location permission denied');
+                },
             },
             {
-              text: 'Allow',
-              onPress: async () => {
-                console.log('Location permission granted');
-                // Continue with the logic, e.g., navigating to 'GoogleMap'
-                Navigation.navigate('GoogleMap', {userInfo : userInfoFromLogin});
-              },
+            text: 'Okay',
+                onPress: async () => {
+                    console.log('Location permission granted');
+                    // Continue with the logic, e.g., navigating to 'GoogleMap'
+                    Navigation.navigate('GoogleMapRegister', {userInfo : userInfoFromLogin});
+                },
             },
-          ]
+            ]
         );
-      };
+        };
 
     const handleBackPress = () => {
         Navigation.goBack(); // Go back to the previous screen with the transition effect
@@ -89,12 +89,6 @@ const UserProfileScreen = () => {
                     <Text style={styles.userName}>
                         {userName}
                     </Text>
-                    <Text>
-                        Contact Number:
-                    </Text>
-                    <Text style={styles.userName}>
-                        {userContactNumber}
-                    </Text>
                     <View style={styles.companyWrapper}>
                         <Text style={styles.userRole}>
                             {userRole}
@@ -109,12 +103,15 @@ const UserProfileScreen = () => {
                             {userLocation}
                         </Text>
                     </View>
+                    <View style={styles.contactWrapper}>
+                        <Text style={styles.contactText}>
+                            Contact Number:
+                        </Text>
+                        <Text style={styles.contactText}>
+                            {userContactNumber}
+                        </Text>
+                    </View>
                     <View style={styles.userOption}>
-                        <TouchableOpacity style={styles.optionButton} onPress={handleSample}>
-                            <Text style={styles.optionProfileText}>
-                                Test
-                            </Text>
-                        </TouchableOpacity>
                         <TouchableOpacity style={styles.optionButton} onPress={handleSample}>
                             <Text style={styles.optionProfileText}>
                                 Register a place
@@ -270,8 +267,10 @@ const styles = StyleSheet.create({
     },
     optionButton:{
         marginTop: "10%",
-        padding: "7%",
+        width: '100%',
+        padding: 25,
         margin: "2%",
+        alignItems: 'center',
         backgroundColor: "#05a3fc",
         borderRadius: 100,
     },
@@ -280,6 +279,14 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         fontSize: 20,
         color: "white",
+    },
+    contactWrapper:{
+        flexDirection: 'row'
+    },
+
+    contactText:{
+        fontSize: 20,
+        marginRight: '2%',
     },
 
 });

@@ -203,8 +203,8 @@
       'file' => 
       array (
         'driver' => 'file',
-        'path' => 'C:\\xampp\\htdocs\\Project\\RentagoApi\\storage\\framework/cache/data',
-        'lock_path' => 'C:\\xampp\\htdocs\\Project\\RentagoApi\\storage\\framework/cache/data',
+        'path' => 'C:\\xampp\\htdocs\\Project\\RentagoApi2\\storage\\framework/cache/data',
+        'lock_path' => 'C:\\xampp\\htdocs\\Project\\RentagoApi2\\storage\\framework/cache/data',
       ),
       'memcached' => 
       array (
@@ -377,13 +377,13 @@
       'local' => 
       array (
         'driver' => 'local',
-        'root' => 'C:\\xampp\\htdocs\\Project\\RentagoApi\\storage\\app',
+        'root' => 'C:\\xampp\\htdocs\\Project\\RentagoApi2\\storage\\app',
         'throw' => false,
       ),
       'public' => 
       array (
         'driver' => 'local',
-        'root' => 'C:\\xampp\\htdocs\\Project\\RentagoApi\\storage\\app/public',
+        'root' => 'C:\\xampp\\htdocs\\Project\\RentagoApi2\\storage\\app/public',
         'url' => 'http://192.168.1.5:3000/storage',
         'visibility' => 'public',
         'throw' => false,
@@ -403,7 +403,7 @@
     ),
     'links' => 
     array (
-      'C:\\xampp\\htdocs\\Project\\RentagoApi\\public\\storage' => 'C:\\xampp\\htdocs\\Project\\RentagoApi\\storage\\app/public',
+      'C:\\xampp\\htdocs\\Project\\RentagoApi2\\public\\storage' => 'C:\\xampp\\htdocs\\Project\\RentagoApi2\\storage\\app/public',
     ),
   ),
   'hashing' => 
@@ -444,14 +444,14 @@
       'single' => 
       array (
         'driver' => 'single',
-        'path' => 'C:\\xampp\\htdocs\\Project\\RentagoApi\\storage\\logs/laravel.log',
+        'path' => 'C:\\xampp\\htdocs\\Project\\RentagoApi2\\storage\\logs/laravel.log',
         'level' => 'debug',
         'replace_placeholders' => true,
       ),
       'daily' => 
       array (
         'driver' => 'daily',
-        'path' => 'C:\\xampp\\htdocs\\Project\\RentagoApi\\storage\\logs/laravel.log',
+        'path' => 'C:\\xampp\\htdocs\\Project\\RentagoApi2\\storage\\logs/laravel.log',
         'level' => 'debug',
         'days' => 14,
         'replace_placeholders' => true,
@@ -516,7 +516,7 @@
       ),
       'emergency' => 
       array (
-        'path' => 'C:\\xampp\\htdocs\\Project\\RentagoApi\\storage\\logs/laravel.log',
+        'path' => 'C:\\xampp\\htdocs\\Project\\RentagoApi2\\storage\\logs/laravel.log',
       ),
     ),
   ),
@@ -592,7 +592,7 @@
       'theme' => 'default',
       'paths' => 
       array (
-        0 => 'C:\\xampp\\htdocs\\Project\\RentagoApi\\resources\\views/vendor/mail',
+        0 => 'C:\\xampp\\htdocs\\Project\\RentagoApi2\\resources\\views/vendor/mail',
       ),
     ),
   ),
@@ -705,7 +705,7 @@
     'lifetime' => '120',
     'expire_on_close' => false,
     'encrypt' => false,
-    'files' => 'C:\\xampp\\htdocs\\Project\\RentagoApi\\storage\\framework/sessions',
+    'files' => 'C:\\xampp\\htdocs\\Project\\RentagoApi2\\storage\\framework/sessions',
     'connection' => NULL,
     'table' => 'sessions',
     'store' => NULL,
@@ -726,9 +726,9 @@
   array (
     'paths' => 
     array (
-      0 => 'C:\\xampp\\htdocs\\Project\\RentagoApi\\resources\\views',
+      0 => 'C:\\xampp\\htdocs\\Project\\RentagoApi2\\resources\\views',
     ),
-    'compiled' => 'C:\\xampp\\htdocs\\Project\\RentagoApi\\storage\\framework\\views',
+    'compiled' => 'C:\\xampp\\htdocs\\Project\\RentagoApi2\\storage\\framework\\views',
   ),
   'passport' => 
   array (
@@ -817,7 +817,7 @@
     array (
     ),
     'enable_runnable_solutions' => NULL,
-    'remote_sites_path' => 'C:\\xampp\\htdocs\\Project\\RentagoApi',
+    'remote_sites_path' => 'C:\\xampp\\htdocs\\Project\\RentagoApi2',
     'local_sites_path' => '',
     'housekeeping_endpoint_prefix' => '_ignition',
     'settings_file_path' => '',

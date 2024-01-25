@@ -104,7 +104,9 @@ return (
             {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
             {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
             <TouchableOpacity style={styles.loginButton} mode="contained" onPress={handleSubmit} disabled={isSubmitting}>
-                <Text style={styles.loginButtonText}>Login</Text>
+                <Text style={styles.loginButtonText}>
+                    Login
+                </Text>
             </TouchableOpacity>
             <View style={styles.signupWrapper}>
                 <Text style={styles.signupInfo}>

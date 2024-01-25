@@ -17,20 +17,20 @@ const Home = () => {
 
   const handleSearch = () => {
     // Navigate to 'GoogleMap' screen when search button is pressed
-    Navigation.navigate('GoogleMapSearch');
+    Navigation.navigate('GoogleMapRegister');
   };
 
   return (
     <View style={styles.body}>
       <NavigationBar token={tokenFromLogin} userInfo={userInfoFromLogin} />
       <ScrollView style={styles.scrollingContent} showsVerticalScrollIndicator={false}>
-        <View style={styles.imageWrapper}>
+        {/* <View style={styles.imageWrapper}>
           <Image 
             source={require('../assets/Login/rentago1.png')} 
             style={styles.loginImage}
           />
           <Text>Alpha Version</Text>
-        </View>
+        </View> */}
         <View style={styles.content}>
           <TouchableOpacity onPress={handleSearch} style={styles.searchBarContainer}>
             <Text style={styles.searchText} >Search</Text>
@@ -53,12 +53,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  loginImage: {
-    resizeMode: 'cover',
-    marginTop: '30%',
-    width: 300,
-    height: 200,
-  },
+  
   scrollingContent: {
     // futureUse
   },

@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
-import { View, Button, Image, TextInput, StyleSheet, Text, ScrollView, TouchableOpacity} from 'react-native';
+import {
+  View,  Button, Image, 
+  TextInput, StyleSheet, Text, 
+  ScrollView, TouchableOpacity, Dimensions} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import { useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 
+const SCREEN_WIDTH = Dimensions.get("window").width;
+const SCREEN_HEIGHT = Dimensions.get("window").height;
+
 const ImageUpload = () => {
-  const [address, setAddress] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
 
@@ -16,58 +21,63 @@ const ImageUpload = () => {
 
   const userInfoFromLogin = route.params?.userInfo;
   const coordinatesFromGoogleMap = route.params?.coordinate;
-
-  const handleTest = () => {
-    // console.log(JSON.stringify('Address: ' + address));
-    // console.log(JSON.stringify('Description: ' + description));
-    // console.log(JSON.stringify('Price: ' + price));
-  }
+  const userCityFromGoogleMap = route.params?.userCity;
+  const userRegionFromGoogleMap = route.params?.userRegion;
 
   const updatedRegisterInfo = {
-    id: userInfoFromLogin.id,
+    user_id: userInfoFromLogin.id,
     longitude: coordinatesFromGoogleMap.longitude,
     latitude: coordinatesFromGoogleMap.latitude,
-    address: address,
+    address: userCityFromGoogleMap + ', ' + userRegionFromGoogleMap,
     description: description,
-    price: price,
+    price: 'PHP ' + price,
+  }
+  const handleTest = () => {
+    // console.log(JSON.stringify('Description: ' + description));
+    // console.log(JSON.stringify('Price: ' + 'PHP'+price));
+    console.log(updatedRegisterInfo)
+    // console.log()
+
   }
 
   const handleNextButton = () => {
-    console.log(JSON.stringify('User\'s ID : '+ updatedRegisterInfo.id));
-    console.log(JSON.stringify('Longitude: ' + updatedRegisterInfo.longitude));
-    console.log(JSON.stringify('Latitude: ' + updatedRegisterInfo.latitude));
-    console.log(JSON.stringify('Address: ' + address));
-    console.log(JSON.stringify('Description: ' + description));
-    console.log(JSON.stringify('Price: ' + price));
-    // Navigation.navigate('', )
+    if (!userCityFromGoogleMap || !userRegionFromGoogleMap || !description || !price) {
+      // Display an alert or a message indicating that the fields need to be filled
+      alert('Please fill in all the required fields.');
+      return; // Don't proceed further if validation fails
+    }
+  
+    console.log(JSON.stringify(userInfoFromLogin))
+    console.log(JSON.stringify(updatedRegisterInfo))
+  
+    Navigation.navigate('GoogleMapRegisterImage', {
+      updatedRegisterInfo: updatedRegisterInfo
+    });
+  
+    setDescription('');
+    setPrice('');
   }
 
   return (
-    <ScrollView style={styles.main}>
-      <SafeAreaView style={styles.body}>
-        <View style={styles.headerWrapper}>
-          <View style={styles.imageWrapper}>
-            <Image 
-                source={require('../assets/google/almostThere.png')} 
-                style={styles.registerImage}
-            />
+    <ScrollView style={styles.body}>
+      <SafeAreaView style={styles.main}>
+        <View style={styles.imageWrapper}>
+          <Image source={require('../assets/google/almostThere.png')} style={styles.registerImage}/>
+        </View>
+          <View style={styles.headerTextWrapper}>
             <Text style={styles.headerText}>
-              We're almost there, please provide information for the registered location
-            </Text>
+                Please provide information for the registered location
+              </Text>
           </View>
           <View style={styles.inputContent}>
             <View style={styles.inputWrapper}>
               <Text style={styles.inputLabelText}>
-                Address (#/brgy/city/municipal):
+                Address:
               </Text>
-              <View style={styles.inputTextWrapper}>
-                <TextInput
-                  style={styles.inputText}
-                  placeholder="Address"
-                  value={address}
-                  onChangeText={text => setAddress(text)}
-                  multiline={true}
-                />
+              <View style={styles.inputLabelTextWrapper}>
+                <Text style={styles.inputLabelTextAddress}>
+                  {userCityFromGoogleMap + ' | ' + userRegionFromGoogleMap}
+                </Text>
               </View>
             </View>
             <View style={styles.inputWrapper}>
@@ -86,15 +96,18 @@ const ImageUpload = () => {
             </View>
             <View style={styles.inputWrapper}>
               <Text style={styles.inputLabelText}>
-                Price (php/middleContentText):
+                Price: 
               </Text>
               <View style={styles.inputTextWrapper}>
+                <Text style={styles.inputLabelText}>
+                  PHP   | 
+                </Text>
                 <TextInput
                   style={styles.inputText}
-                  placeholder="PHP"
+                  placeholder="PHP/Month"
                   value={price}
                   onChangeText={text => setPrice(text)}
-                  multiline={true}
+                  keyboardType="numeric"
                 />
               </View>
             </View>
@@ -104,118 +117,153 @@ const ImageUpload = () => {
               Proceed
             </Text>
           </TouchableOpacity>
-        </View>
       </SafeAreaView>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  main:{
-    // marginTop: '%',
-    backgroundColor: 'white'
+  body: {
+    backgroundColor: 'white',
   },
 
-  body: {
-    height: '100%',
-    width: '100%',
-    flex: 1,
+  main:{
+    // width: '100%',
+    height: SCREEN_HEIGHT * 1.15,
     alignItems: 'center',
-    backgroundColor: 'white',
-    // justifyContent: 'center',
+    justifyContent: 'center',
   },
+  
   imageWrapper:{
-    marginTop: '1%',
-    width: '100%',
-    height: '100%',
+    // marginTop: '5%',
+    width: '95%',
+    height: '25%',
     alignItems: 'center',
-    padding: 5,
-    borderRadius: 40,
+    justifyContent: 'center',
+    borderRadius: 30,
     elevation: 10,
     backgroundColor: '#55bCF6',
+    borderWidth: 5,
+    borderColor: 'violet',
   },
 
   registerImage:{
-    width: '100%',
-    height: '180%',
+    // marginTop: 50,
+    width: SCREEN_WIDTH * 0.91,
+    height: SCREEN_WIDTH * 1.1,
     borderRadius: 40,
+    // elevation: 5,
   },
 
   headerWrapper:{
     borderRadius: 40,
     width: '100%',
-    height: '20%',
+    height: '100%',
     backgroundColor: 'violet',
   },
   
   inputContent:{
-    height: '100%',
-    marginTop: '60%',
+    height: SCREEN_WIDTH * 0.8,
+    width: '95%',
+    marginTop: '5%',
     // backgroundColor: 'green',
+
+  },
+  headerTextWrapper:{
+    marginTop: SCREEN_WIDTH * 0.2,
+    width: '95%',
+
   },
 
   headerText:{
-    width: '90%',
-    fontSize: 30,
+    // width: '95%',
+    fontSize: 28,
     textAlign: 'center',
-    fontWeight: 'normal',
-    // marginTop: '5%',
+    marginTop: '5%',
   },
 
   inputWrapper:{
     alignItems: 'center',
     flexDirection: 'row',
     width: '100%',
-    height: '60%',
+    height:SCREEN_HEIGHT *0.12,
     padding: '2%',
-    // marginTop: '70%',
-    // marginTop: '5%',
-    // elevation: 10,
-    // borderWidth: 0.5,
-    // backgroundColor: 'gray',
+    marginVertical: '2%',
+
   },
 
   inputLabelText:{
+    marginLeft: 5,
     fontSize: 18,
     width: '25%',
+    fontWeight: 'bold',
+    textAlignVertical: 'center',
+    // backgroundColor: 'red',
+  },
+
+  inputLabelTextWrapper:{
+    width: '100%',
+    flexDirection: 'row',
+    // backgroundColor: 'blue', 
+    // alignItems: 'center',
+    // justifyContent: 'center',
+  },
+
+  inputLabelTextAddress:{
+    fontSize: 18,
+    width: '75%',
+    flexDirection: 'column',
+    textAlignVertical: 'center',
+    marginLeft: 5,
+    fontWeight: 'bold',
+    borderRadius: 40,
+    height: 80,
   },
 
   inputTextWrapper:{
-    // marginLeft: '5%',
+    flexDirection: 'row',
     width: '75%',
     borderRadius: 40,
     borderWidth: 0.5,
+    padding:10,
+    // justifyContent: 'center',
+    // textAlignVertical: 'center',
     // backgroundColor: 'gray',
   },
   
   inputText:{
-    borderRadius: 20,
-    marginLeft: '5%',
+    fontSize: 18,
+    // borderRadius: 20,
+    // marginLeft: '5%',
     height: 80,
     // backgroundColor: 'pink'
   },
   handleNextButtonWrapper:{
-    // borderTopWidth: 0.2,
     borderColor: 'gray',
     width: '100%',
-    marginTop: 140,
-    height: 70,
+    height: SCREEN_HEIGHT * 0.1,
+    marginTop: SCREEN_HEIGHT * 0.05,
     alignItems: 'center',
     justifyContent: 'center',
+    // marginTop: 140,
+    // borderTopWidth: 0.2,
+    // elevation: 5,
     // backgroundColor: 'blue',
   },
 
   NextButton:{
-    marginTop: 20,
-    height: 70,
+    width: '95%',
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    // marginTop: 20,
+    height: SCREEN_HEIGHT * 0.1,
     borderRadius: 50,
     fontSize: 30,
     padding: 15,
     backgroundColor: '#55bCF6',
     color: 'white',
     fontWeight: 'bold',
-    elevation: 5,
-  },
+  }
 
 });
 

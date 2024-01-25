@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Location extends Model
 {
+    protected $table = 'locations';
     protected $guarded = [] ;
 public function user(): BelongsTo
     {

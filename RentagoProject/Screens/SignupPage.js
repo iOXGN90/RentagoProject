@@ -15,6 +15,8 @@ const SignupSchema = Yup.object().shape({
     .oneOf([Yup.ref('password'), null], 'Passwords must match')
     .required('Confirm Password is required'),
   contact_number: Yup.string().required('Contact Number is required'),
+  location: Yup.string().required('Location is required'),
+  role: Yup.string().required('Role is required'),
 
 });
 
@@ -114,12 +116,12 @@ const SignupPage = () => {
                 onBlur={handleBlur('location')}
                 />{touched.location && errors.location && <Text style={styles.errorText}>{errors.location}</Text>}
 
-                <Text style={styles.signupTextInput}>
-                  role: student/landlord/student&landlord
-                </Text>
+                {/* <Text style={styles.signupTextInput}>
+                  
+                </Text> */}
               <TextInput
                 style={styles.signupTextInput}
-                label={"Role"}
+                label={"Role: Student/Landlord or Both"}
                 autoCapitalize="sentences"
                 value={values.role}
                 onChangeText={handleChange('role')}
@@ -127,7 +129,6 @@ const SignupPage = () => {
                 />
               {touched.role && errors.role && <Text style={styles.errorText}>{errors.role}</Text>}
 
-            
               <TextInput
                 style={styles.signupTextInput}
                 label={"Contact Number"}
@@ -137,6 +138,7 @@ const SignupPage = () => {
                 onChangeText={handleChange('contact_number')}
                 onBlur={handleBlur('contact_number')}
               />{touched.contact_number && errors.contact_number && (<Text style={styles.errorText}>{errors.contact_number}</Text>)}
+
               <TextInput
                 style={styles.signupTextInput}
                 label={"Email"}
@@ -221,7 +223,7 @@ const styles = StyleSheet.create({
   signupTextInput: {
     marginTop: 5,
     fontSize: 20,
-    width: 340,
+    width: 370,
     padding: 5,
     marginVertical: 25,
     backgroundColor: '#ffffff',
