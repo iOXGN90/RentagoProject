@@ -1,5 +1,5 @@
-
 Sample_Project
 LoginForm_Project
-pulic/storage/
-vendor
+RentagoApi2/pulic/storage/images
+RentagoApi2/vendor
+RentagoApi2/.env
