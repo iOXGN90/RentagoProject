@@ -96,7 +96,7 @@ const Test = () => {
       });
       console.log('Image uploaded!', response.data);
     } catch (error) {
-      console.error('Error uploading image:', error);
+      // console.error('Error uploading image:', error);
     } finally {
       setIsLoading(false);
       Navigation.navigate('GoogleMapRegisterImageConfirmation', {

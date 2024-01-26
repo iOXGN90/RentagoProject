@@ -17,7 +17,7 @@ const Home = () => {
 
   const handleSearch = () => {
     // Navigate to 'GoogleMap' screen when search button is pressed
-    Navigation.navigate('GoogleMapRegister');
+    Navigation.navigate('GoogleMapSearch');
   };
 
   return (

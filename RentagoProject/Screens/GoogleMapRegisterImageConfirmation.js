@@ -22,7 +22,7 @@ const GoogleMapRegisterImageConfirmation = () => {
 
     const handleProfile = () => {
         Navigation.navigate('UserProfile', {
-            // userInfo: userInfoFromLogin
+            userInfo: userInfoFromLogin
         });
     }
 
