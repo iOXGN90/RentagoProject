@@ -1,232 +1,278 @@
 import React, { useState } from 'react';
-import { Button, Image, View, ScrollView, StyleSheet, Text, Dimensions, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, ScrollView, Dimensions, TouchableOpacity, Text, Image, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { useRoute } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
-import mime from "mime";
+import { useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
-const width = Dimensions.get("window").width;
-const height = Dimensions.get("window").height;
+const WIDTH = Dimensions.get("window").width;
+const HEIGHT = Dimensions.get("window").height;
 
-export default function GoogleMapRegisterImage() {
+const Test = () => {
+
+  const Navigation = useNavigation();
   const route = useRoute();
-  const registeredInformation = route.params?.updatedRegisterInfo
-  const [allSelectedImages, setAllSelectedImages] = useState([]);
 
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsMultipleSelection: true,
-      aspect: [9, 16],
-      quality: 1,
-    });
+  const updatedInformation = route.params?.updatedRegisterInfo;
 
-    if (!result.canceled) {
-      const selectedImages = result.assets.map((asset) => ({
-        uri: asset.uri,
-        id: `${asset.uri}_${Date.now()}`, // Use a combination of URI and timestamp for a unique ID
-      }));
+  const sample = () => {
+    console.log(updatedInformation)
+  }
+  const [selectedImages, setSelectedImages] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-      // Use a single array to store all selected images
-      setAllSelectedImages([...allSelectedImages, ...selectedImages]);
-    }
+  const handleChooseImage = async () => {
+  let result = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    allowsMultipleSelection: true,
+    aspect: [4, 3],
+    quality: 1,
+  });
+
+  if (!result.cancelled) {
+    // Append the newly selected images to the existing ones
+    setSelectedImages((prevImages) => [...prevImages, ...result.assets]);
+  }
+};
+  const handleRemoveImage = (index) => {
+    const updatedImages = [...selectedImages];
+    updatedImages.splice(index, 1);
+    setSelectedImages(updatedImages);
   };
 
-  const removeImage = (id) => {
-    // Filter out the image with the specified id
-    const updatedImages = allSelectedImages.filter((image) => image.id !== id);
-    setAllSelectedImages(updatedImages);
-  };
+  const handleImageUpload = async () => {
+    const minImages = 5;
+    const maxImages = 10;
   
-  const collectedImages = [];
-
-const uploadImages = async () => {
-  try {
-    const apiUrl = 'http://192.168.1.5:3000/api/store-location';
-    
-    const collectedImages = []; // Initialize an array to collect image names
-    
-    allSelectedImages.forEach((image, index) => {
-      const filename = Date.now() + index + '.jpg';
-      collectedImages.push(filename); // Collect the image names
-      console.log(`Image ${index + 1}: ${filename}`);
-    });
-
+    if (selectedImages.length < minImages || selectedImages.length > maxImages) {
+      // Alert the user or handle the case where the number of images is not within the required range
+      Alert.alert(
+        'Invalid Number of Images',
+        `Please select between ${minImages} and ${maxImages} images.`,
+      );
+      return;
+    }
+  
+    setIsLoading(true);
+  
+    const formData = new FormData();
+  
+    // Define requestData here or get it from somewhere
     const requestData = {
-      user_id: 1, // Replace with your user_id logic
-      long: registeredInformation.longitude,
-      lat: registeredInformation.latitude,
-      address: registeredInformation.address,
-      description: registeredInformation.description,
-      price: registeredInformation.price,
-      url: collectedImages,
+      id: updatedInformation.id,
+      long: updatedInformation.longitude,
+      lat: updatedInformation.latitude,
+      address: updatedInformation.address,
+      description: updatedInformation.description,
+      price: updatedInformation.price,
     };
 
-    console.log(requestData);
-
-    const formData = new FormData(); // Create a FormData object
-    formData.append('user_id', requestData.user_id);
+    // Add other form fields
+    formData.append('user_id', requestData.id);
     formData.append('long', requestData.long);
     formData.append('lat', requestData.lat);
     formData.append('address', requestData.address);
     formData.append('description', requestData.description);
     formData.append('price', requestData.price);
-
-    collectedImages.forEach((imageName, index) => {
-      formData.append(`url[${index}]`, imageName); // Append each image name with a unique key
+  
+    // Handle array of files from selectedImages
+    selectedImages.forEach((file, index) => {
+      const timestamp = Date.now(); // Generate a unique timestamp
+      formData.append(`url[${index}]`, {
+        uri: file.uri,
+        type: 'image/jpeg',
+        name: `Image_from_Android_${timestamp}_${index}.jpg`, // Include timestamp in the file name
+      });
     });
 
-    const response = await axios.post(apiUrl, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data', // Set the content type
-      },
-    });
+    try {
+      // Make the POST request to your API endpoint
+      let response = await axios.post('http://192.168.1.5:3000/api/store-location', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log('Image uploaded!', response.data);
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    } finally {
+      setIsLoading(false);
+      Navigation.navigate('GoogleMapRegisterImageConfirmation')
 
-    console.log('Upload successful!', response.data);
-  } catch (error) {
-    console.error('Error uploading images:', error.response.data);
-    // Handle the error as needed
-  }
-};
+    }
+  };
 
-
-
-  const test = () =>{
-    console.log("Filenames of Stacked Images:");
-
-    allSelectedImages.forEach((image, index) => {
-      const filename = Date.now() + index + '.jpg';
-      console.log(`Image ${index + 1}: ${filename}`);
-    });
-
-    console.log(registeredInformation.user_id)
-    console.log(registeredInformation.latitude)
-    console.log('this is from address '+ registeredInformation.address)
-    console.log(registeredInformation.description)
-    console.log(registeredInformation.price)
-    // const allUris = allSelectedImages.map(image => image.uri);
-    // console.log(JSON.stringify(allUris));
-  }
-
-  const filename = new Date().getTime() + '.jpg'
   return (
-    <ScrollView style={styles.body}>
-      <View style={styles.imageWrapper}>
-        <Image 
-          source={require('../assets/google/almostThere.png')} 
-          style={styles.registerImage}
-        />
-      </View>
-      <View style={styles.headerTextWrapper}>
-        <Text style={styles.headerText}>
-          Please upload an Image!
-        </Text>
-      </View>
-      <TouchableOpacity style={styles.selectImageButtonWrapper} onPress={pickImage}>
-        <Text style={styles.selectImageButton}>
-          Select an Image
-        </Text>
-      </TouchableOpacity>
-      <ScrollView style={{ backgroundColor: '#f0f0f0', borderRadius: 5 }} horizontal>
-        {allSelectedImages.map((image) => (
-          <View key={image.id} style={{ marginHorizontal: 15, marginVertical: 15 }}>
-            <Image source={{ uri: image.uri }} style={{ width: 200, height: 300, borderRadius: 30 }} />
-            <Text style={{ textAlign: 'center', marginTop: 5 }}>
-              {image.filename || filename }
-            </Text>
-            <TouchableOpacity style={styles.selectImageButtonWrapperRemover} onPress={() => removeImage(image.id)}>
-              <Text style={styles.selectImageButtonRemover}>Remove</Text>
-            </TouchableOpacity>
-          </View>
-        ))}
-      </ScrollView>
-      {allSelectedImages.length > 0 && (
-        <TouchableOpacity style={styles.selectImageButtonWrapper} onPress={uploadImages}>
-          <Text style={styles.selectImageButton}>
-            Upload Image
+    <ScrollView>
+      <SafeAreaView style={styles.body}>
+        <View style={styles.imageWrapper}>
+          <Image source={require('../assets/google/almostThere.png')} style={styles.registerImage} />
+        </View>
+        <View style={styles.headerTextWrapper}>
+          <Text style={styles.headerText}>
+            We're almost there, you are required to upload images of the place!
           </Text>
-        </TouchableOpacity>
-      )}
+        </View>
+        <View style={styles.selectedImagesWrapper}>
+          {selectedImages.map((image, index) => (
+            <View key={index} style={styles.selectedImageContainer}>
+              <Image source={{ uri: image.uri }} style={styles.selectedImage} />
+              <TouchableOpacity
+                style={styles.removeImageButton}
+                onPress={() => handleRemoveImage(index)}>
+                <Text style={styles.removeImageButtonText}>
+                  Remove
+                </Text>
+              </TouchableOpacity>
+            </View>
+          ))}
+        </View>
+        <View style={styles.uploadImagesWrapper}>
+          <TouchableOpacity style={styles.selectImageButtonWrapper} onPress={handleChooseImage}>
+            <Text style={styles.selectImageButton}>
+              Select Image
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.uploadImageButtonWrapper,
+              { backgroundColor: selectedImages.length === 0 || isLoading ? '#A9A9A9' : '#55bCF6' },
+            ]}
+            onPress={handleImageUpload}
+            disabled={selectedImages.length === 0 || isLoading}>
+            <Text style={styles.uploadImageButton}>
+              {isLoading ? 'Uploading...' : 'Upload Image'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
     </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   body: {
     flex: 1,
-    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   imageWrapper: {
-    marginTop: '1%',
-    width: width * 1,
-    height: height * 0.525,
+    width: WIDTH * 0.95,
+    height: HEIGHT * 0.63,
     alignItems: 'center',
-    padding: 5,
-    borderRadius: 40,
+    justifyContent: 'center',
+    borderRadius: 30,
     elevation: 10,
+    backgroundColor: '#55bCF6',
     borderWidth: 5,
     borderColor: 'violet',
-    backgroundColor: '#55bCF6',
   },
 
   registerImage: {
-    width: '100%',
-    height: height * 0.5,
+    width: WIDTH * 0.95,
+    height: HEIGHT * 0.6,
     borderRadius: 40,
   },
 
   headerTextWrapper: {
-    width: width * 1,
-    height: height * 0.10,
-    // backgroundColor: 'blue'
+    marginTop: HEIGHT * 0.01,
+    width: '95%',
+    paddingBottom: 30,
+    borderBottomWidth: 0.3,
+    padding: 10,
+    borderRadius: 5,
   },
 
   headerText: {
-    width: '95%',
     fontSize: 28,
     textAlign: 'center',
-    marginTop: '5%',
+  },
+
+  selectedImagesWrapper: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginVertical: 25,
+  },
+
+  selectedImage: {
+    width: WIDTH * 0.4,
+    height: HEIGHT * 0.3,
+    margin: 5,
+    borderRadius: 15,
+  },
+
+  selectedImageContainer:{
+    alignItems: 'center',
+    justifyContent: 'center',
+    // backgroundColor: 'blue',
+    borderWidth: 0.1,
+    margin: 15,
+    borderRadius:5,
+
+  },
+
+  removeImageButton: {
+    backgroundColor: 'blue',
+    // position: 'absolute',
+    // top: 5,
+    // right: 5,
+    backgroundColor: 'red',
+    // padding: 10,
+    margin: 10,
+    height: HEIGHT*0.03,
+    width: WIDTH*0.2,
+    borderRadius: 15,
+    justifyContent: 'center',
+  },
+
+  removeImageButtonText: {
+    color: 'white',
+    fontSize: 18,
+    textAlign: 'center',
+  },
+
+  uploadImagesWrapper: {
+    height: HEIGHT * 0.2,
+    width: WIDTH * 1,
+    alignItems: 'center',
   },
 
   selectImageButtonWrapper: {
-    width: width,
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: height * 0.1
-  },
-  selectImageButtonWrapperRemover:{
-
-    width: width*0.5,
-    // backgroundColor: 'blue',
-  },
-
-
-  selectImageButtonRemover:{
-    // marginHorizontal: 15,
-    marginVertical: 20,
-    width: width * 0.47,
-    textAlign: 'center',
-    fontWeight: 'bold',
-    color: 'white',
-    backgroundColor: 'red',
-    padding: 10,
-    borderRadius: 40,
+    width: WIDTH * 0.95,
+    padding: 15,
+    marginTop: 20,
+    backgroundColor: '#55bCF6',
+    borderRadius: 30,
     elevation: 10,
-    fontSize: 18,
+  },
+
+  uploadImageButtonWrapper: {
+    width: WIDTH * 0.95,
+    padding: 15,
     marginTop: 10,
-    // marginRight: 5,
+    backgroundColor: '#55bCF6',
+    borderRadius: 30,
+    elevation: 10,
   },
 
   selectImageButton: {
-    width: width * 0.95,
     textAlign: 'center',
-    fontWeight: 'bold',
     color: 'white',
-    backgroundColor: '#55bCF6',
-    padding: 15,
-    borderRadius: 40,
-    elevation: 10,
+    fontWeight: 'bold',
     fontSize: 25,
   },
-});
+
+  uploadImageButton: {
+    textAlign: 'center',
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 25,
+  },
+
+})
+
+
+export default Test;

@@ -14,12 +14,7 @@ class LocationController extends Controller
 {
     public function storeLocation(Request $request)
     {
-        // Ensure the user is authenticated
-        // $user = Auth::user();
-
-        // if (!$user) {
-        //     return response()->json(['error' => 'Unauthorized.'], JsonResponse::HTTP_UNAUTHORIZED);
-        // }
+        // return response()->json(file(''));
 
         // Validation rules
         $validator = Validator::make($request->all(), [
@@ -28,7 +23,7 @@ class LocationController extends Controller
             'address' => 'required',
             'description' => 'required',
             'price' => 'required',
-            'url.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048|required',
+            'url.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:10000|required',
         ]);
 
         // Check for validation failure

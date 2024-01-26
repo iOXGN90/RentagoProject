@@ -9,8 +9,8 @@ import { useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 
-const SCREEN_WIDTH = Dimensions.get("window").width;
-const SCREEN_HEIGHT = Dimensions.get("window").height;
+const WIDTH = Dimensions.get("window").width;
+const HEIGHT = Dimensions.get("window").height;
 
 const ImageUpload = () => {
   const [description, setDescription] = useState('');
@@ -25,19 +25,18 @@ const ImageUpload = () => {
   const userRegionFromGoogleMap = route.params?.userRegion;
 
   const updatedRegisterInfo = {
-    user_id: userInfoFromLogin.id,
+    id: userInfoFromLogin.id,
     longitude: coordinatesFromGoogleMap.longitude,
     latitude: coordinatesFromGoogleMap.latitude,
     address: userCityFromGoogleMap + ', ' + userRegionFromGoogleMap,
     description: description,
-    price: 'PHP ' + price,
+    price: price,
   }
   const handleTest = () => {
     // console.log(JSON.stringify('Description: ' + description));
     // console.log(JSON.stringify('Price: ' + 'PHP'+price));
-    console.log(updatedRegisterInfo)
+    // console.log(updatedRegisterInfo)
     // console.log()
-
   }
 
   const handleNextButton = () => {
@@ -49,11 +48,10 @@ const ImageUpload = () => {
   
     console.log(JSON.stringify(userInfoFromLogin))
     console.log(JSON.stringify(updatedRegisterInfo))
-  
+
     Navigation.navigate('GoogleMapRegisterImage', {
       updatedRegisterInfo: updatedRegisterInfo
     });
-  
     setDescription('');
     setPrice('');
   }
@@ -66,8 +64,8 @@ const ImageUpload = () => {
         </View>
           <View style={styles.headerTextWrapper}>
             <Text style={styles.headerText}>
-                Please provide information for the registered location
-              </Text>
+              Please provide information for the registered location
+            </Text>
           </View>
           <View style={styles.inputContent}>
             <View style={styles.inputWrapper}>
@@ -87,7 +85,7 @@ const ImageUpload = () => {
               <View style={styles.inputTextWrapper}>
                 <TextInput
                   style={[styles.inputText, { height: Math.max(80, description.split('\n').length * 20) }]}
-                  placeholder="Provide description..."
+                  placeholder="Provide specific features in the place"
                   value={description}
                   onChangeText={text => setDescription(text)}
                   multiline={true}
@@ -129,15 +127,15 @@ const styles = StyleSheet.create({
 
   main:{
     // width: '100%',
-    height: SCREEN_HEIGHT * 1.15,
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
   
   imageWrapper:{
     // marginTop: '5%',
-    width: '95%',
-    height: '25%',
+    width: WIDTH*0.95,
+    height: HEIGHT*0.63,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 30,
@@ -148,11 +146,10 @@ const styles = StyleSheet.create({
   },
 
   registerImage:{
-    // marginTop: 50,
-    width: SCREEN_WIDTH * 0.91,
-    height: SCREEN_WIDTH * 1.1,
+    width: WIDTH * 0.95,
+    height: HEIGHT * 0.6,
+    // padding: 10,
     borderRadius: 40,
-    // elevation: 5,
   },
 
   headerWrapper:{
@@ -161,35 +158,38 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: 'violet',
   },
+
+  headerTextWrapper:{
+    marginTop: HEIGHT * 0.01,
+    width: '95%',
+    paddingBottom: 30,
+    borderBottomWidth: 0.3,
+    padding: 10,
+    borderRadius: 5,
+    // backgroundColor: 'blue',
+    // elevation: 1,
+  },
   
   inputContent:{
-    height: SCREEN_WIDTH * 0.8,
-    width: '95%',
-    marginTop: '5%',
+    height: HEIGHT * 0.40,
+    width: WIDTH * 0.95 ,
+    // marginTop: '5%',
     // backgroundColor: 'green',
-
-  },
-  headerTextWrapper:{
-    marginTop: SCREEN_WIDTH * 0.2,
-    width: '95%',
 
   },
 
   headerText:{
-    // width: '95%',
     fontSize: 28,
     textAlign: 'center',
-    marginTop: '5%',
   },
 
   inputWrapper:{
     alignItems: 'center',
     flexDirection: 'row',
     width: '100%',
-    height:SCREEN_HEIGHT *0.12,
-    padding: '2%',
-    marginVertical: '2%',
-
+    height: HEIGHT *0.12,
+    marginVertical: HEIGHT * 0.012,
+    // padding: '2%',
   },
 
   inputLabelText:{
@@ -233,16 +233,12 @@ const styles = StyleSheet.create({
   
   inputText:{
     fontSize: 18,
-    // borderRadius: 20,
-    // marginLeft: '5%',
     height: 80,
-    // backgroundColor: 'pink'
   },
   handleNextButtonWrapper:{
-    borderColor: 'gray',
     width: '100%',
-    height: SCREEN_HEIGHT * 0.1,
-    marginTop: SCREEN_HEIGHT * 0.05,
+    height: HEIGHT * 0.1,
+    marginVertical: HEIGHT * 0.05,
     alignItems: 'center',
     justifyContent: 'center',
     // marginTop: 140,
@@ -256,7 +252,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     textAlignVertical: 'center',
     // marginTop: 20,
-    height: SCREEN_HEIGHT * 0.1,
+    height: HEIGHT * 0.1,
     borderRadius: 50,
     fontSize: 30,
     padding: 15,

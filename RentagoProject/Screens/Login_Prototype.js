@@ -191,6 +191,7 @@ const styles = StyleSheet.create({
         borderRadius: 25,
         elevation: 10,
     },
+    
     loginButtonText: {
         textAlign: 'center',
         color: 'white',

@@ -120,11 +120,7 @@ export default function App() {
               {
                 text: 'Yes',
                 onPress: () => {
-                  // console.log(userAddress)
-                  // console.log(coordinate)
-                  // console.log(userInfoFromLogin)
-                  // console.log('City:', city);
-                  // console.log('Region:', region);
+                  // console.log(userInfoFromLogin);
                   Navigation.navigate('GoogleMapRegisterInformation', {
                     coordinate: coordinate,
                     userInfo: userInfoFromLogin,
@@ -228,6 +224,7 @@ const styles = StyleSheet.create({
   map: {
     flex: 1,
   },
+
   searchContainer: {
     position: 'absolute',
     width: '100%',
