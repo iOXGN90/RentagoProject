@@ -1,12 +1,14 @@
 // UserProfileScreen.js
 import React, {useState, useEffect} from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Alert, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { IconButton } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons'; // Import the appropriate icon
 import { useRoute } from '@react-navigation/native';
 import axios from 'axios';
+
+const { width, height } = Dimensions.get('window');
 
 
 const GoogleMapSearchProfile = () => {
@@ -70,7 +72,12 @@ const GoogleMapSearchProfile = () => {
                 </View>
                 <View style={styles.userProfile_centerNavBar}>
                     <Text style={styles.header}>
-                        Profile
+                        Landlord Profile
+                    </Text>
+                </View>
+                <View style={styles.userProfile_rightNavBar}>
+                    <Text style={styles.header}>
+                        {/* Landlord Profile */}
                     </Text>
                 </View>
             </View>
@@ -110,6 +117,11 @@ const GoogleMapSearchProfile = () => {
                                 Apply Reserve
                             </Text>
                         </TouchableOpacity>
+                        <TouchableOpacity style={styles.optionButton} onPress={handleSample}>
+                            <Text style={styles.optionProfileText}>
+                                Chat Now!
+                            </Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>
@@ -133,8 +145,8 @@ const styles = StyleSheet.create({
     },
     userProfile_leftNavBar:{
         justifyContent: "center",
+        width: "10%",
         // alignItems: "center",
-        width: "33%",
         // backgroundColor: "pink",
     },
     goBackButton:{
@@ -145,11 +157,11 @@ const styles = StyleSheet.create({
 
     goBackButtonIcon: {
         borderRadius: 10,
-        marginBottom: "25%",
+        marginBottom: height * 0.02,
     },
     
     userProfile_centerNavBar:{
-        width: "33%",
+        width: "80%",
         justifyContent: "center",
         alignItems: "center",
     },
@@ -160,7 +172,7 @@ const styles = StyleSheet.create({
     },
 
     userProfile_rightNavBar:{
-        width: "33%",
+        width: "10%",
         alignItems: "flex-end",
         justifyContent: "center",
         // marginRight: 30,
