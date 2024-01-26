@@ -14,6 +14,7 @@ import GoogleMapRegisterImage from './Screens/GoogleMapRegisterImage';
 import GoogleMapRegisterInformation from './Screens/GoogleMapRegisterInformation'
 import GoogleMapSearch from './Screens/GoogleMapSearch';
 import GoogleMapRegisterImageConfirmation from './Screens/GoogleMapRegisterImageConfirmation'
+import AboutUs from './Screens/AboutUsPage';
 import sample from './Screens/sample'
 import Test from './Screens/Test'
 
@@ -43,8 +44,8 @@ return (
             <Stack.Screen name="SignUp" component={SignupPage}/>
             <Stack.Screen name="SignUpTermsAndCondtion" component={SignupTermsAndConditionPage}/>
             <Stack.Screen name="SignupConfirmation" component={SignupConfirmationPage}/>
+            <Stack.Screen name="AboutUs" component={AboutUs} /> 
         </Stack.Navigator>
     </NavigationContainer>
     );
 };
-

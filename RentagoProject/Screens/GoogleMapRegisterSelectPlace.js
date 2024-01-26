@@ -120,7 +120,11 @@ export default function App() {
               {
                 text: 'Yes',
                 onPress: () => {
-                  // console.log(userInfoFromLogin);
+// <<<<<<< Updated upstream
+//                   // console.log(userInfoFromLogin);
+// =======
+//                   // console.log(coordinate);
+// >>>>>>> Stashed changes
                   Navigation.navigate('GoogleMapRegisterInformation', {
                     coordinate: coordinate,
                     userInfo: userInfoFromLogin,
@@ -231,9 +235,14 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 15,
     borderBottomLeftRadius: 15,
     top: Constants.statusBarHeight,
-    // 
-    height: '10%',
-    backgroundColor: 'white',
+//     // 
+// <<<<<<< Updated upstream
+//     height: '10%',
+//     backgroundColor: 'white',
+// // =======
+//     // height: '10%',
+//     // backgroundColor: 'white',
+// >>>>>>> Stashed changes
     // borderColor: 'gray',
     elevation: 5,
     padding: 5,
