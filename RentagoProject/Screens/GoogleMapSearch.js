@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { View, StyleSheet, Alert, Dimensions, Text } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker, Callout } from 'react-native-maps';
 import axios from 'axios';
@@ -14,6 +14,8 @@ const LATITUDE_DELTA = 0.02;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const GoogleMapSearch = () => {
+  
+  const mapRef = useRef(null);
   const Navigation = useNavigation();
   const [positions, setPositions] = useState([]);
   const [searchedPlace, setSearchedPlace] = useState(null);
@@ -49,10 +51,10 @@ const GoogleMapSearch = () => {
       const updatedPositions = [...prevPositions];
       const pressedMarker = updatedPositions[index];
       pressedMarker.pressed = !pressedMarker.pressed;
-  
+
       // Log the entire data response
       // console.log('Data response:', pressedMarker);
-  
+
       return updatedPositions;
     });
   };
@@ -67,36 +69,65 @@ const GoogleMapSearch = () => {
   const handlePlaceSelected = (details) => {
     if (details && details.geometry && details.geometry.location) {
       const { location } = details.geometry;
-      setSearchedPlace(location);
+  
+      // Make sure location object has 'lat' and 'lng' properties
+      if (location && location.lat && location.lng) {
+        const newRegion = {
+          latitude: location.lat,
+          longitude: location.lng,
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LONGITUDE_DELTA,
+        };
+  
+        setSearchedPlace(newRegion);
+  
+        // Animate the map to the new region
+        mapRef.current.animateToRegion(newRegion);
+      } else {
+        console.warn('Invalid location data:', location);
+        setSearchedPlace(null);
+      }
     }
   };
 
   return (
     <View style={styles.container}>
-      <MapView style={styles.map} provider={PROVIDER_GOOGLE} initialRegion={INITIAL_POSITION}>
+      <MapView
+        ref={mapRef}
+        style={styles.map}
+        provider={PROVIDER_GOOGLE}
+        initialRegion={INITIAL_POSITION}
+      >
         {/* Display markers for each position in the array */}
-        {positions.map((position, index) => (
-          <Marker
-            key={index}
-            coordinate={{ latitude: +position.lat, longitude: +position.long }}
-            title={position.name}
-            description={`Contact: ${position.contact_number}`}
-            pinColor={position.pressed ? 'blue' : 'red'}
-            onPress={() => handleMarkerPress(index)}
-          >
-            <Callout onPress={() => handleCalloutPress(index)}>
-              <View style={{
-                backgroundColor:'white',
-                borderRadius: 10,
-              }}>
-                <Text>Click here to view more!</Text>
-                <Text>Hi, I'm {position.name}!</Text>
-                <Text>Contact me: {position.contact_number}</Text>
-                <Text>Price: PHP {position.price}!</Text>
-              </View>
-            </Callout>
-          </Marker>
-        ))}
+        {positions.map((position, index) => {
+          if (!position.lat || !position.long) {
+            console.warn(`Invalid coordinates for marker at index ${index}:`, position);
+            return null; // Skip rendering the marker
+          }
+
+          return (
+            <Marker
+              key={index}
+              coordinate={{ latitude: +position.lat, longitude: +position.long }}
+              title={position.name}
+              description={`Contact: ${position.contact_number}`}
+              pinColor={position.pressed ? 'blue' : 'red'}
+              onPress={() => handleMarkerPress(index)}
+            >
+              <Callout onPress={() => handleCalloutPress(index)}>
+                <View style={{
+                  backgroundColor: 'white',
+                  borderRadius: 10,
+                }}>
+                  <Text>Hi, I'm {position.name}!</Text>
+                  <Text>Contact me: {position.contact_number}</Text>
+                  <Text>Price: PHP {position.price}!</Text>
+                  <Text>Click here to view more!</Text>
+                </View>
+              </Callout>
+            </Marker>
+          );
+        })}
         {searchedPlace && (
           <Marker
             coordinate={searchedPlace}

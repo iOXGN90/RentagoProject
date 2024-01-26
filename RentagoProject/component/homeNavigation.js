@@ -37,15 +37,14 @@ const styles = StyleSheet.create({
         width: "100%",
         height: "10%",
         flexDirection: "row",
-        marginTop: "1%",
-        // backgroundColor: "blue",
+        // backgroundColor:'red',
     },
     leftNav:{
         width: "50%",
         flexDirection: 'row',
         alignItems: 'center',
-        // padding: 10,
         justifyContent: 'center',
+        // padding: 10,
         // backgroundColor: "brown",
     },
     logo:{

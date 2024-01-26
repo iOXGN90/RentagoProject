@@ -268,7 +268,8 @@ const styles = StyleSheet.create({
     optionButton:{
         marginTop: "10%",
         width: '100%',
-        padding: 25,
+        padding: 15,
+        paddingVertical: 30,
         margin: "2%",
         alignItems: 'center',
         backgroundColor: "#05a3fc",
