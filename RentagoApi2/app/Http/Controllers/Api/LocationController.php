@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Location;
 use App\Models\MultiImage;
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class LocationController extends Controller
 {
@@ -64,5 +66,13 @@ class LocationController extends Controller
         ];
 
         return response()->json(['data' => $responseData, 'message' => 'Successfully Registered!'], JsonResponse::HTTP_OK);
+    }
+    public function find_location(){
+        $usersWithLocations = DB::table('users')
+        ->join('locations', 'users.id', '=', 'locations.user_id')
+        ->select('locations.lat', 'locations.long', 'users.name', 'users.contact_number')
+        ->get();
+        
+        return response()->json(['data' => $usersWithLocations]);
     }
 }

@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import MapView, { PROVIDER_GOOGLE, Marker, Callout } from 'react-native-maps';
 import { Dimensions, StyleSheet, View, Text, Alert, Image, TouchableOpacity } from 'react-native';
 import { GooglePlacesAutocomplete, GooglePlaceDetail } from 'react-native-google-places-autocomplete';
-import { GOOGLE_API_KEY } from '../enviroment';
+import { GOOGLE_API_KEY } from '../environment';
 import Constants from 'expo-constants';
 import * as Location from 'expo-location';
 import { useNavigation } from '@react-navigation/native';
@@ -32,8 +32,14 @@ function InputAutocomplete({
         styles={{ textInput: styles.input }}
         placeholder={placeholder || ''}
         fetchDetails
+        onFail={(error) => console.error('Autocomplete error:', error)}
+
         onPress={(data, details = null) => {
-          onPlaceSelected(details);
+          if (details) {
+            onPlaceSelected(details);
+          } else {
+            console.warn('No details available for selected place.');
+          }
         }}
         query={{
           key: GOOGLE_API_KEY,
@@ -41,8 +47,8 @@ function InputAutocomplete({
         }}
       />
     </>
-  )
-};
+  );
+}
 
 export default function App() {
   const route = useRoute();
@@ -120,7 +126,7 @@ export default function App() {
               {
                 text: 'Yes',
                 onPress: () => {
-                  // console.log(userInfoFromLogin);
+                  console.log(coordinate);
                   Navigation.navigate('GoogleMapRegisterInformation', {
                     coordinate: coordinate,
                     userInfo: userInfoFromLogin,
@@ -183,9 +189,7 @@ export default function App() {
       </View>
       <View style={styles.searchContainer}>
         <InputAutocomplete placeholder='Search a place...' onPlaceSelected={handlePlaceSelected} style={styles.searchBar} />
-        <TouchableOpacity onPress={() => handleTest(userInfoFromLogin)}>
-          {/* <Text>test</Text> */}
-        </TouchableOpacity>
+        {/* Remove the TouchableOpacity or replace it with the desired functionality */}
       </View>
       <View style={styles.imageWrapper}>
         <Image style={styles.imageRentago} source={require('./../assets/rentago.png')} />
@@ -231,12 +235,11 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 15,
     borderBottomLeftRadius: 15,
     top: Constants.statusBarHeight,
-    // 
-    height: '10%',
     backgroundColor: 'white',
-    // borderColor: 'gray',
     elevation: 5,
     padding: 5,
+    // height: '100%',
+    // borderColor: 'gray',
   },
 
   input: {
