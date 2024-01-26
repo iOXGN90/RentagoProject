@@ -22,10 +22,14 @@ const SignupSchema = Yup.object().shape({
 
 const SignupPage = () => {
   const navigation = useNavigation();
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
 
   const handleSignup = async (values, { setSubmitting, setFieldError, resetForm }) => {
     try {
-      const response = await axios.post('http://192.168.1.5:3000/api/register', {
+      const response = await axios.post('http://192.168.1.5:3000/api/register', 
+      // 'http://10.0.0.53:3000/api/register',
+      {
         name: values.name,
         role: values.role,
         email: values.email,
@@ -152,25 +156,39 @@ const SignupPage = () => {
                 style={styles.signupTextInput}
                 label={"Password"}
                 autoCapitalize="none"
-                secureTextEntry
+                secureTextEntry={!passwordVisible}
                 value={values.password}
                 onChangeText={handleChange('password')}
                 onBlur={handleBlur('password')}
-                require
+                right={
+                  <TextInput.Icon
+                    name={passwordVisible ? 'eye-off' : 'eye'}
+                    color="#55bCF6"
+                    onPress={() => setPasswordVisible(!passwordVisible)}
+                  />
+                }
               />{touched.password && errors.password && (<Text style={styles.errorText}>{errors.password}</Text>)}
 
               <TextInput
                 style={styles.signupTextInput}
                 label={"Confirm Password"}
                 autoCapitalize="none"
-                secureTextEntry
+                secureTextEntry={!confirmPasswordVisible}
                 value={values.confirmPassword}
                 onChangeText={handleChange('confirmPassword')}
                 onBlur={handleBlur('confirmPassword')}
+                right={
+                  <TextInput.Icon
+                    name={confirmPasswordVisible  ? 'eye-off' : 'eye'}
+                    color="#55bCF6"
+                    onPress={() => setConfirmPasswordVisible(!confirmPasswordVisible)}
+                  />
+                }
               />{touched.confirmPassword && errors.confirmPassword && (<Text style={styles.errorText}>{errors.confirmPassword}</Text>)}
               <View style={{
                 // backgroundColor: 'blue',
               }}>
+                
                 <View style={styles.checkboxContainer}><Checkbox.Android status={isChecked ? 'checked' : 'unchecked'} onPress={handleCheck}/>
                     <Text style={styles.checkboxLabel}>
                       I agree to the 
@@ -278,7 +296,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   checkboxLabelBlue:{
-    color: "blue",
+    color: "#55bCF6",
     marginLeft: 2,
     fontSize: 16,
   }

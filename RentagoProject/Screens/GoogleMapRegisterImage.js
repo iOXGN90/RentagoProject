@@ -89,7 +89,9 @@ const Test = () => {
 
     try {
       // Make the POST request to your API endpoint
-      let response = await axios.post('http://192.168.1.5:3000/api/store-location', formData, {
+      let response = await axios.post('http://192.168.1.5:3000/api/store-location', 
+      // 'http://10.0.0.53:3000/api/store-location',
+      formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

@@ -38,6 +38,7 @@ const UserProfileSettings = () => {
             text: 'Yes',
             onPress: async () => {
               const YOUR_LOGOUT_API_ENDPOINT = 'http://192.168.1.5:3000/api/logout';
+          // 'http://10.0.0.53:3000/api/logout';
               // console.log('Token Deleted: ' + userToken);
               const response = await axios.post(
                 YOUR_LOGOUT_API_ENDPOINT,
@@ -63,6 +64,10 @@ const UserProfileSettings = () => {
     } catch (error) {
       console.error('Error during logout:', error);
     }
+  };
+
+  const handleAboutUs = () => {
+    navigation.navigate('AboutUs');
   };
 
   return (
@@ -130,14 +135,14 @@ const UserProfileSettings = () => {
               </View>
               <View style={styles.middleContentArrow}></View>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.middleContentButtons}>
+            <TouchableOpacity style={styles.middleContentButtons} onPress={handleAboutUs}>
               <View style={styles.middleContentIcons}>
                 <MaterialCommunityIcons name="information" size={40} color="black" />
               </View>
-              <Text style={styles.middleContentText}>About us</Text>
+              <Text style={styles.middleContentText}>About Us</Text>
               <View style={styles.middleContentArrow}>
                 <IconButton
-                  icon={() => <Icon name="keyboard-arrow-right" size={50} />} // Use the appropriate icon name
+                  icon={() => <Icon name="keyboard-arrow-right" size={50} />}
                   style={styles.middleArrow}
                 />
               </View>
@@ -266,6 +271,8 @@ const styles = StyleSheet.create({
     height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
+    bottom: 15,
+    right: 20
     // backgroundColor: 'blue',
   },
 
