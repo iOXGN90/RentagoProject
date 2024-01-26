@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { IconButton } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
@@ -12,7 +12,7 @@ const SignupPageTermsAndAgreement = () => {
         navigation.goBack();
     };
     return (
-        <SafeAreaView>
+        <ScrollView>
         <View style={styles.container}>  
             <View style={styles.Header}>
                 <TouchableOpacity onPress={goBack}>
@@ -72,13 +72,13 @@ const SignupPageTermsAndAgreement = () => {
                     Agree
                 </Text>
             </TouchableOpacity>
-        </SafeAreaView>
+        </ScrollView>
     )
 };
 
 const styles = StyleSheet.create({
     container: {
-        height: '30%',
+        flex: 1,
     },
     Header: {
         height: '15%',
@@ -92,14 +92,14 @@ const styles = StyleSheet.create({
     HeaderContent2: {
         fontSize: 25,
         fontWeight: '500',
-        textAlign: 'justify',
+        textAlign: 'center',
         padding: 5,
         margin: 5,
     },
     HeaderContent3: {
         width: '100%',
         fontSize: 20,
-        textAlign: 'justify',
+        textAlign: 'center',
         // paddingHorizontal: 10,
         // margin: 10,
         marginTop: 0,
