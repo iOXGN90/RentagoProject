@@ -168,30 +168,35 @@ const SignupPage = () => {
                 onChangeText={handleChange('confirmPassword')}
                 onBlur={handleBlur('confirmPassword')}
               />{touched.confirmPassword && errors.confirmPassword && (<Text style={styles.errorText}>{errors.confirmPassword}</Text>)}
-
-              <View style={styles.checkboxContainer}><Checkbox.Android status={isChecked ? 'checked' : 'unchecked'} onPress={handleCheck}/>
-                  <Text style={styles.checkboxLabel}>
-                    I agree to the 
-                  </Text>
-                  <TouchableOpacity style={styles.checkboxLabelWrapper} onPress={handleTermsAndCondition}>
-                    <Text style={styles.checkboxLabelBlue}>
-                      Terms and Conditions
+              <View style={{
+                // backgroundColor: 'blue',
+              }}>
+                <View style={styles.checkboxContainer}><Checkbox.Android status={isChecked ? 'checked' : 'unchecked'} onPress={handleCheck}/>
+                    <Text style={styles.checkboxLabel}>
+                      I agree to the 
                     </Text>
-                </TouchableOpacity>
-              </View>
-                  {isSubmitting ? (
-                    <ActivityIndicator color="white" />
-                  ) : (
-                    <TouchableOpacity
-                      style={[styles.signupButton, { backgroundColor: isChecked ? '#55bCF6' : 'gray' }]}
-                      onPress={isChecked ? handleSubmit : null}
-                      disabled={!isChecked}
-                    >
-                      <Text style={styles.signupText}>
-                        Sign up
+                    <TouchableOpacity style={styles.checkboxLabelWrapper} onPress={handleTermsAndCondition}>
+                      <Text style={styles.checkboxLabelBlue}>
+                        Terms and Conditions
                       </Text>
-                    </TouchableOpacity>
-                  )}
+                  </TouchableOpacity>
+                </View>
+                    {isSubmitting ? (
+                      <ActivityIndicator color="white" />
+                    ) : (
+                      <View style={styles.signupButtonWrapper}>
+                        <TouchableOpacity
+                          style={[styles.signupButton, { backgroundColor: isChecked ? '#55bCF6' : 'gray',  }]}
+                          onPress={isChecked ? handleSubmit : null}
+                          disabled={!isChecked}
+                        >
+                          <Text style={styles.signupText}>
+                            Sign up
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    )}
+                </View>
             </View>
           )}
         </Formik>
@@ -203,9 +208,8 @@ const SignupPage = () => {
 
 const styles = StyleSheet.create({
   Container: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'white',
+    flex: 1,
+    // backgroundColor: 'blue',
   },
   Header: {
     height: '5%',
@@ -230,13 +234,12 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
   },
-  signupButton: {
-    width: 340,
-    padding: 15,
-    marginTop: 20,
-    backgroundColor: '#55bCF6',
-    borderRadius: 25,
-    elevation: 10,
+  signupButtonWrapper:{
+    alignItems: 'center',
+    width: '100%',
+    // height: '3%',
+    // backgroundColor: 'blue',
+    justifyContent: 'center',
   },
   signupText: {
     textAlign: 'center',
@@ -244,13 +247,21 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 25,
   },
+  signupButton: {
+    width: '100%',
+    padding: 15,
+    marginTop: 20,
+    backgroundColor: '#55bCF6',
+    borderRadius: 25,
+    elevation: 10,
+  },
   errorText: {
     color: 'red',
     marginTop: 10,
     textAlign: 'center',
   },
   checkboxContainer: {
-    width: 340,
+    // width: 340,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
