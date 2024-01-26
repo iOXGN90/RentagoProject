@@ -15,6 +15,7 @@ const Test = () => {
   const route = useRoute();
 
   const updatedInformation = route.params?.updatedRegisterInfo;
+  const userInfoFromLogin = route.params?.userInfo;
 
   const sample = () => {
     console.log(updatedInformation)
@@ -98,7 +99,9 @@ const Test = () => {
       console.error('Error uploading image:', error);
     } finally {
       setIsLoading(false);
-      Navigation.navigate('GoogleMapRegisterImageConfirmation')
+      Navigation.navigate('GoogleMapRegisterImageConfirmation', {
+        userInfo: userInfoFromLogin
+      })
 
     }
   };

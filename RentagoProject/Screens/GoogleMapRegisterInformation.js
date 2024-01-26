@@ -50,7 +50,8 @@ const ImageUpload = () => {
     console.log(JSON.stringify(updatedRegisterInfo))
 
     Navigation.navigate('GoogleMapRegisterImage', {
-      updatedRegisterInfo: updatedRegisterInfo
+      updatedRegisterInfo: updatedRegisterInfo,
+      userInfo: userInfoFromLogin
     });
     setDescription('');
     setPrice('');

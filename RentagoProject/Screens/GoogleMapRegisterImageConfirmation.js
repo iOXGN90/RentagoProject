@@ -3,8 +3,13 @@ import { TouchableOpacity, Image, Text, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { IconButton } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 
 const GoogleMapRegisterImageConfirmation = () => {
+
+  const route = useRoute();
+  const userInfoFromLogin = route.params?.userInfo;
+
     const [showImage, setShowImage] = useState(false);
     useEffect(() => {
         const timeoutID = setTimeout(() =>{
@@ -16,8 +21,11 @@ const GoogleMapRegisterImageConfirmation = () => {
     const Navigation = useNavigation(); /// will use the useNavigation that is imported
 
     const handleProfile = () => {
-        Navigation.navigate('UserProfile');
+        Navigation.navigate('UserProfile', {
+            // userInfo: userInfoFromLogin
+        });
     }
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.Body}>
