@@ -70,7 +70,7 @@ class LocationController extends Controller
     public function find_location(){
         $usersWithLocations = DB::table('users')
         ->join('locations', 'users.id', '=', 'locations.user_id')
-        ->select('locations.lat', 'locations.long', 'users.name', 'users.contact_number')
+        ->select('locations.lat', 'locations.long','users.*')
         ->get();
         
         return response()->json(['data' => $usersWithLocations]);

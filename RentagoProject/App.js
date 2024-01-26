@@ -14,6 +14,7 @@ import GoogleMapRegisterImage from './Screens/GoogleMapRegisterImage';
 import GoogleMapRegisterInformation from './Screens/GoogleMapRegisterInformation'
 import GoogleMapSearch from './Screens/GoogleMapSearch';
 import GoogleMapRegisterImageConfirmation from './Screens/GoogleMapRegisterImageConfirmation'
+import GoogleMapSearchProfile from './Screens/GoogleMapSearchProfile'
 import sample from './Screens/sample'
 import Test from './Screens/Test'
 
@@ -38,6 +39,7 @@ return (
             <Stack.Screen name="GoogleMapRegisterImageConfirmation" component={GoogleMapRegisterImageConfirmation} />
             <Stack.Screen name="GoogleMapRegisterImage" component={GoogleMapRegisterImage} />
             <Stack.Screen name="GoogleMapSearch" component={GoogleMapSearch}/>
+            <Stack.Screen name="GoogleMapSearchProfile" component={GoogleMapSearchProfile}/>
             <Stack.Screen name="UserProfile" component={UserProfilePage}/>
             <Stack.Screen name="UserProfileSetting" component={UserProfileSettingsPage}/> 
             <Stack.Screen name="SignUp" component={SignupPage}/>

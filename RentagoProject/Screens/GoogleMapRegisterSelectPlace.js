@@ -167,7 +167,7 @@ export default function App() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.mapContainer}>
         <MapView
           ref={mapRef}
@@ -194,14 +194,14 @@ export default function App() {
       <View style={styles.imageWrapper}>
         <Image style={styles.imageRentago} source={require('./../assets/rentago.png')} />
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    // backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -216,7 +216,6 @@ const styles = StyleSheet.create({
     bottom: -59,
     right: Constants.rightOffset,
     width: '100%',
-    height: 'auto',
     flexDirection: 'row-reverse',
   },
 
@@ -231,13 +230,15 @@ const styles = StyleSheet.create({
 
   searchContainer: {
     position: 'absolute',
-    width: '100%',
+    width: '95%',
+    marginHorizontal: width * 0.029,
+
     borderBottomRightRadius: 15,
     borderBottomLeftRadius: 15,
-    top: Constants.statusBarHeight,
-    backgroundColor: 'white',
-    elevation: 5,
-    padding: 5,
+    top: Constants.statusBarHeight*1,
+    // padding: 5,
+    // backgroundColor: 'white',
+    // elevation: 5,
     // height: '100%',
     // borderColor: 'gray',
   },
@@ -248,6 +249,6 @@ const styles = StyleSheet.create({
     borderWidth: 0.3,
     borderRadius: 50,
     elevation: 5,
-    height: height * 0.07,
+    height: height * 0.08,
   },
 });
