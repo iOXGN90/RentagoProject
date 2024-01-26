@@ -1,11 +1,14 @@
 import React, {useState} from 'react';
-import { View, Text, TouchableOpacity, ActivityIndicator, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, ActivityIndicator, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { IconButton, TextInput, Checkbox  } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
+
+const { width, height } = Dimensions.get('window');
+
 
 const SignupSchema = Yup.object().shape({
   name: Yup.string().required('Name is required'),
@@ -77,12 +80,34 @@ const SignupPage = () => {
     <SafeAreaView style={styles.Container}>
     <ScrollView>
       <View style={styles.Header}>
-        <TouchableOpacity onPress={goBack}>
-          <IconButton icon={'arrow-left'} />
-        </TouchableOpacity>
+        <View style={{
+          width: '10%',
+          alignItems:'center',
+          justifyContent:'center',
+        }}>
+          <TouchableOpacity onPress={goBack}>
+            <IconButton icon={'arrow-left'} />
+          </TouchableOpacity>
+        </View>
+        <View style={{
+          width: '80%',
+          justifyContent:'center',
+          alignItems:'center',
+        }}>
+          <Text style={{
+            textAlignVertical:'center',
+            fontSize: 30
+          }}>
+            Create Account
+          </Text>
+        </View>
+        <View style={{
+          width: '10%',
+        }}>
+
+        </View>
       </View>
       <View style={styles.Body}>
-        <Text style={styles.createAccountText}>Create Account</Text>
         <Formik
           style={styles.Container}
           initialValues={{
@@ -227,34 +252,36 @@ const SignupPage = () => {
 const styles = StyleSheet.create({
   Container: {
     flex: 1,
-    // backgroundColor: 'blue',
+    backgroundColor: 'white',
   },
   Header: {
-    height: '5%',
+    flexDirection: 'row',
+    // height: '5%',
+    // justifyContent:'center',
+    // alignItems:'center',
   },
+  createAccountText: {
+    fontSize: 30,
+    marginBottom: 20,
+  },
+
   Body: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: '100%',
-    height: '90%',
-  },
-  createAccountText: {
-    fontSize: 40,
-    marginBottom: 20,
+    // width: '100%',
+    // height: '100%',
   },
   signupTextInput: {
-    marginTop: 5,
     fontSize: 20,
-    width: 370,
-    padding: 5,
-    marginVertical: 25,
+    width: width*0.85,
+    marginVertical: height * 0.02,
     backgroundColor: '#ffffff',
     flexDirection: 'column',
     justifyContent: 'center',
   },
   signupButtonWrapper:{
     alignItems: 'center',
-    width: '100%',
+    // width: width * 0.5,
     // height: '3%',
     // backgroundColor: 'blue',
     justifyContent: 'center',

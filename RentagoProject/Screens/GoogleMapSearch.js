@@ -49,14 +49,10 @@ const GoogleMapSearch = () => {
       const updatedPositions = [...prevPositions];
       const pressedMarker = updatedPositions[index];
       pressedMarker.pressed = !pressedMarker.pressed;
-
-      // Log the ID and name of the pressed user
-      console.log('Pressed user ID:', pressedMarker.id);
-      console.log('Pressed user name:', pressedMarker.name);
-
-      // Add a console.log statement for "pressed"
-      console.log('Marker pressed:', pressedMarker.pressed);
-
+  
+      // Log the entire data response
+      // console.log('Data response:', pressedMarker);
+  
       return updatedPositions;
     });
   };
@@ -89,9 +85,14 @@ const GoogleMapSearch = () => {
             onPress={() => handleMarkerPress(index)}
           >
             <Callout onPress={() => handleCalloutPress(index)}>
-              <View>
-                <Text>Press me! {position.name}</Text>
-                <Text>Contact: {position.contact_number}</Text>
+              <View style={{
+                backgroundColor:'white',
+                borderRadius: 10,
+              }}>
+                <Text>Click here to view more!</Text>
+                <Text>Hi, I'm {position.name}!</Text>
+                <Text>Contact me: {position.contact_number}</Text>
+                <Text>Price: PHP {position.price}!</Text>
               </View>
             </Callout>
           </Marker>
@@ -101,7 +102,7 @@ const GoogleMapSearch = () => {
             coordinate={searchedPlace}
             title="Searched Place"
             description="This is the searched place"
-            pinColor="green"
+            pinColor="blue"
           />
         )}
       </MapView>
