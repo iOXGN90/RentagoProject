@@ -67,12 +67,16 @@ class LocationController extends Controller
 
         return response()->json(['data' => $responseData, 'message' => 'Successfully Registered!'], JsonResponse::HTTP_OK);
     }
-    public function find_location(){
-        $usersWithLocations = DB::table('users')
+    public function find_location()
+{
+    $usersWithLocations = DB::table('users')
         ->join('locations', 'users.id', '=', 'locations.user_id')
-        ->select('locations.lat', 'locations.long','users.*')
+        ->select('locations.lat', 'locations.long', 'locations.price', 'users.*')
         ->get();
-        
-        return response()->json(['data' => $usersWithLocations]);
+
+return response()->json(['data' => $usersWithLocations]);
+}
+    public function show_image(){
+
     }
 }

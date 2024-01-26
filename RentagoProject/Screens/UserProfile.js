@@ -1,12 +1,14 @@
 // UserProfileScreen.js
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Alert, ImageBackground, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { IconButton } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons'; // Import the appropriate icon
 import { useRoute } from '@react-navigation/native';
 
+
+const { width, height } = Dimensions.get('window');
 
 const UserProfileScreen = () => {
     const route = useRoute();
@@ -61,6 +63,10 @@ const UserProfileScreen = () => {
 
     return (
         <SafeAreaView style={styles.body}>
+            <ImageBackground
+                source={{ uri: 'https://i.ibb.co/D5bKCFL/background.png' }}  // Placeholder
+                style={styles.imageBackground}
+            >
             <View style={styles.userProfile_navBar}>
                 <View style={styles.userProfile_leftNavBar}>
                     <TouchableOpacity onPress={handleBackPress} style={styles.goBackButton}>
@@ -120,6 +126,7 @@ const UserProfileScreen = () => {
                     </View>
                 </View>
             </View>
+            </ImageBackground>
             {/* Add your user profile content here */}
         </SafeAreaView>
     );
@@ -215,7 +222,7 @@ const styles = StyleSheet.create({
         width: "60%",
         borderRadius: 1000,
         borderWidth: 5,
-        borderColor: "#05a3fc",
+        borderColor: "white",
     },
     userInformation:{
         marginTop: "5%",
@@ -262,13 +269,17 @@ const styles = StyleSheet.create({
         // marginLeft: "1%",
     },
     userOption:{
-        width: "50%",
+        width: width * 1,
+        // backgroundColor: 'blue',
         flexDirection: "row",
+        justifyContent: 'center',
+        alignItems:'center',
     },
     optionButton:{
         marginTop: "10%",
-        width: '100%',
-        padding: 25,
+        width: width * 0.9,
+        // padding: 15,
+        paddingVertical: 30,
         margin: "2%",
         alignItems: 'center',
         backgroundColor: "#05a3fc",
@@ -276,8 +287,9 @@ const styles = StyleSheet.create({
     },
 
     optionProfileText:{
+        // width: width * 0.5,
         fontWeight: "bold",
-        fontSize: 20,
+        fontSize: 28,
         color: "white",
     },
     contactWrapper:{

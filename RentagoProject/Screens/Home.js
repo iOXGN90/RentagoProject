@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { TouchableOpacity, View, Text, StyleSheet, ImageBackground, ScrollView } from 'react-native';
+import { TouchableOpacity, View, Text, StyleSheet, ImageBackground, ScrollView, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import NavigationBar from '../component/homeNavigation';
 import { Searchbar } from 'react-native-paper';
 import { useRoute } from '@react-navigation/native';
+
+const { width, height } = Dimensions.get('window');
 
 const Home = () => {
   const Navigation = useNavigation();
@@ -26,15 +28,16 @@ const Home = () => {
         source={{ uri: 'https://i.ibb.co/D5bKCFL/background.png' }}  // Placeholder
         style={styles.imageBackground}
       >
-        <NavigationBar token={tokenFromLogin} userInfo={userInfoFromLogin} />
+        <NavigationBar style={{
+          
+        }}
+        token={tokenFromLogin} userInfo={userInfoFromLogin} />
 
-        <ScrollView style={styles.contentContainer} showsVerticalScrollIndicator={false}>
+        <View style={styles.contentContainer} showsVerticalScrollIndicator={false}>
           <TouchableOpacity onPress={handleSearch} style={styles.searchButton}>
             <Text style={styles.searchButtonText}>Search</Text>
           </TouchableOpacity>
-
-          {/* Other content components can be added here */}
-        </ScrollView>
+        </View>
       </ImageBackground>
     </View>
   );
@@ -43,6 +46,7 @@ const Home = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor:'white',
   },
   imageBackground: {
     flex: 1,
@@ -50,20 +54,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   contentContainer: {
-    flex: 1,
+    // flex: 1,
     paddingHorizontal: 20,
     paddingTop: 20,
+    height: '90%',
+    // backgroundColor:'red',
+    justifyContent:"center",
+
   },
   searchButton: {
-    backgroundColor: '#55bCF6',
+    backgroundColor: '#05a3fc',
     padding: 15,
-    borderRadius: 10,
+    borderRadius: 30,
     alignItems: 'center',
-    marginTop: 250,
+    elevation: 10,
   },
   searchButtonText: {
     color: 'white',
-    fontSize: 18,
+    fontSize: 28,
     fontWeight: 'bold',
   },
 });

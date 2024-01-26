@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
         width: 340,
         padding: 15,
         marginTop: 40,
-        backgroundColor: '#55bCF6',
+        backgroundColor: '#05a3fc',
         borderRadius: 25,
         elevation: 10,
     },

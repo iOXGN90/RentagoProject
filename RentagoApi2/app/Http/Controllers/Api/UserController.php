@@ -18,9 +18,15 @@ class UserController extends Controller
             dd(response()->json($e->getMessage()));
         }
     }
-    public function singleProfile($id){
-        $users =  User::findOrFail($id);
-        
-        return response()->json($users);
-    }
+    public function singleProfile($id)
+{
+    $usersInfoWithImages = DB::table('users')
+            ->join('locations', 'users.id', '=', 'locations.user_id')
+            ->join('multi_images', 'locations.id', '=', 'multi_images.id')
+            ->where('users.id', '=', $id)
+            ->select('users.*', 'locations.id', 'multi_images.url')
+            ->get();
+
+        return response()->json(['data' => $usersInfoWithImages]);
+}
 }
