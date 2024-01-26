@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import { TextInput } from 'react-native-paper';
+import { TextInput, IconButton } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Formik } from 'formik';
@@ -9,125 +9,128 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginSchema = Yup.object().shape({
-    email: Yup.string().email('Invalid email or password').required('Email is required'),
-    password: Yup.string().required('Password is required'),
+  email: Yup.string().email('Invalid email or password').required('Email is required'),
+  password: Yup.string().required('Password is required'),
 });
 
 const Login = () => {
-    const navigation = useNavigation();
-    const [newToken, setNewToken] = useState(null);
+  const navigation = useNavigation();
+  const [newToken, setNewToken] = useState(null);
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
-  // useEffect(() => {
-  //   console.log(newToken, "login");
-  // }, [userInfo, newToken]);
-
-return (
+  return (
     <SafeAreaView style={styles.container}>
-        <View style={styles.imageWrapper}>
-            <Image 
-                source={require('../assets/Login/HD_Logo.png')} 
-                style={styles.loginImage}
-            />
-        </View>
-        <Formik
+      <View style={styles.imageWrapper}>
+        <Image
+          source={require('../assets/Login/HD_Logo.png')}
+          style={styles.loginImage}
+        />
+      </View>
+      <Formik
         initialValues={{ email: '', password: '' }}
         validationSchema={LoginSchema}
         onSubmit={async (values, { setSubmitting, setFieldError, resetForm }) => {
-        try {
+          try {
             await LoginSchema.validate(values, { abortEarly: false });
-            const response = await axios.post('http://192.168.1.5:3000/api/login', {
-                email: values.email,
-                password: values.password,
+            const response = await axios.post('http://192.168.1.5:3000/api/login', 
+            // 'http://10.0.0.53:3000/api/login',
+            {
+              email: values.email,
+              password: values.password,
             });
             const accessToken = response.data.data.token;
-            // console.log(accessToken)
             setNewToken(accessToken);
             await AsyncStorage.setItem('userAccessToken', accessToken);
 
             const userInfo = {
-                name: response.data.data.name,
-                location: response.data.data.location,
-                role: response.data.data.role,
-                contact_number: response.data.data.contact_number,
-                id: response.data.data.id
+              name: response.data.data.name,
+              location: response.data.data.location,
+              role: response.data.data.role,
+              contact_number: response.data.data.contact_number,
+              id: response.data.data.id,
             };
 
-            console.log('Welcome, user: ' + response.data.data.name)
+            console.log('Welcome, user: ' + response.data.data.name);
 
             navigation.navigate('Home', { token: accessToken, userInfo: userInfo });
-            
-            // resetForm();
-            } catch (error) {
+          } catch (error) {
             if (error instanceof Yup.ValidationError) {
-                error.inner.forEach((e) => {
+              error.inner.forEach((e) => {
                 setFieldError(e.path, e.message);
-                });
+              });
             } else if (!values.email || !values.password) {
-                setFieldError('email', 'Please fill in the blank');
-                setFieldError('password', 'Please fill in the blank');
+              setFieldError('email', 'Please fill in the blank');
+              setFieldError('password', 'Please fill in the blank');
             } else if (error.response && (error.response.status === 401 || error.response.status === 404)) {
-                setFieldError('email', 'Invalid email');
-                setFieldError('password', 'Invalid password');
+              setFieldError('email', 'Invalid email');
+              setFieldError('password', 'Invalid password');
             } else {
-                setFieldError('email', 'An unexpected error occurred');
-                console.error(error, '');
+              setFieldError('email', 'An unexpected error occurred');
+              console.error(error, '');
             }
-            } finally {
+          } finally {
             setSubmitting(false);
-        }
+          }
         }}
-    >
+      >
         {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting, resetForm }) => (
-        <View style={styles.Body}>
+          <View style={styles.Body}>
             <TextInput
-                style={styles.loginTextInput}
-                label="Email"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                value={values.email}
-                onChangeText={handleChange('email')}
-                onBlur={handleBlur('email')}
-                error={touched.email && errors.email}
-                clearTextOnFocus
+              style={styles.loginTextInput}
+              label="Email"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              value={values.email}
+              onChangeText={handleChange('email')}
+              onBlur={handleBlur('email')}
+              error={touched.email && errors.email}
+              clearTextOnFocus
             />
             <TextInput
-                style={styles.loginTextInput}
-                label="Password"
-                autoCapitalize="none"
-                secureTextEntry
-                value={values.password}
-                onChangeText={handleChange('password')}
-                onBlur={handleBlur('password')}
-                error={touched.password && errors.password}
-                clearTextOnFocus
+              style={styles.loginTextInput}
+              label="Password"
+              autoCapitalize="none"
+              secureTextEntry={!passwordVisible}
+              value={values.password}
+              onChangeText={handleChange('password')}
+              onBlur={handleBlur('password')}
+              error={touched.password && errors.password}
+              clearTextOnFocus
+              right={
+                <TextInput.Icon
+                  name={passwordVisible ? 'eye-off' : 'eye'}
+                  color="#55bCF6"
+                  onPress={() => setPasswordVisible(!passwordVisible)}
+                />
+              }
             />
             {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
             {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
             <TouchableOpacity style={styles.loginButton} mode="contained" onPress={handleSubmit} disabled={isSubmitting}>
-                <Text style={styles.loginButtonText}>
-                    Login
-                </Text>
+              <Text style={styles.loginButtonText}>
+                Login
+              </Text>
             </TouchableOpacity>
             <View style={styles.signupWrapper}>
-                <Text style={styles.signupInfo}>
-                    Don't have an account?
-                </Text>
-                <TouchableOpacity onPress={() => {
-                        resetForm(); navigation.navigate('SignUp');
-                    }}
-                >
+              <Text style={styles.signupInfo}>
+                Don't have an account?
+              </Text>
+              <TouchableOpacity onPress={() => {
+                resetForm();
+                navigation.navigate('SignUp');
+              }}
+              >
                 <Text style={styles.signupText}>
-                    Sign up now!
+                  Sign up now!
                 </Text>
-                </TouchableOpacity>
+              </TouchableOpacity>
             </View>
-            </View>
+          </View>
         )}
-        </Formik>
+      </Formik>
     </SafeAreaView>
-    );
+  );
 };
-
 
 const styles = StyleSheet.create({
     container: {
