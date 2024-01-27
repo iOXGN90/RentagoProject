@@ -182,7 +182,7 @@ export default function App() {
                 <View>
                   <Text>Coordinates: {markerPosition.latitude}, {markerPosition.longitude}</Text>
                 </View>
-              </Callout>
+              </Callout> 
             </Marker>
           )}
         </MapView>
@@ -229,21 +229,17 @@ const styles = StyleSheet.create({
   },
 
   searchContainer: {
+    justifyContent: 'center',
     position: 'absolute',
-    width: '95%',
     marginHorizontal: width * 0.029,
-
+    width: '95%',
     borderBottomRightRadius: 15,
     borderBottomLeftRadius: 15,
-    top: Constants.statusBarHeight*1,
-    // padding: 5,
-    // backgroundColor: 'white',
-    // elevation: 5,
-    // height: '100%',
-    // borderColor: 'gray',
+    top: Constants.statusBarHeight * 1.3,
   },
 
   input: {
+    textAlign: 'center',
     width: width * 1,
     borderColor: 'gray',
     borderWidth: 0.3,

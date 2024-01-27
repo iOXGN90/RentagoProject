@@ -14,7 +14,6 @@ const LATITUDE_DELTA = 0.02;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const GoogleMapSearch = () => {
-  
   const mapRef = useRef(null);
   const Navigation = useNavigation();
   const [positions, setPositions] = useState([]);
@@ -26,6 +25,8 @@ const GoogleMapSearch = () => {
     latitudeDelta: LATITUDE_DELTA,
     longitudeDelta: LONGITUDE_DELTA,
   };
+
+  const ZOOM_LEVEL = 15; // You can adjust this value to control the zoom level
 
   useEffect(() => {
     // Fetch positions using Axios
@@ -52,8 +53,18 @@ const GoogleMapSearch = () => {
       const pressedMarker = updatedPositions[index];
       pressedMarker.pressed = !pressedMarker.pressed;
 
-      // Log the entire data response
-      // console.log('Data response:', pressedMarker);
+      if (pressedMarker.pressed) {
+        // Zoom to a specific size when a red marker is pressed
+        const newRegion = {
+          latitude: +pressedMarker.lat,
+          longitude: +pressedMarker.long,
+          latitudeDelta: LATITUDE_DELTA / ZOOM_LEVEL,
+          longitudeDelta: LONGITUDE_DELTA / ZOOM_LEVEL,
+        };
+
+        // Animate the map to the new region
+        mapRef.current.animateToRegion(newRegion);
+      }
 
       return updatedPositions;
     });
@@ -104,7 +115,6 @@ const GoogleMapSearch = () => {
             console.warn(`Invalid coordinates for marker at index ${index}:`, position);
             return null; // Skip rendering the marker
           }
-
           return (
             <Marker
               key={index}
@@ -112,6 +122,8 @@ const GoogleMapSearch = () => {
               title={position.name}
               description={`Contact: ${position.contact_number}`}
               pinColor={position.pressed ? 'blue' : 'red'}
+              // Add elevation to red markers
+              style={position.pressed ? { zIndex: 1, elevation: 50 } : { elevation: 50 }}
               onPress={() => handleMarkerPress(index)}
             >
               <Callout onPress={() => handleCalloutPress(index)}>
@@ -180,6 +192,7 @@ const styles = StyleSheet.create({
   },
 
   input: {
+    textAlign: 'center',
     width: width * 1,
     borderColor: 'gray',
     borderWidth: 0.3,

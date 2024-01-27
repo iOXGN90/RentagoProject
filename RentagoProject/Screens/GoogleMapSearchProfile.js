@@ -110,6 +110,11 @@ const GoogleMapSearchProfile = () => {
                                 Apply Reserve
                             </Text>
                         </TouchableOpacity>
+                        <TouchableOpacity style={styles.optionButton} onPress={handleSample}>
+                            <Text style={styles.optionProfileText}>
+                                Chat now!
+                            </Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { TouchableOpacity, View, Text, StyleSheet, ImageBackground, ScrollView } from 'react-native';
+import { TouchableOpacity, View, Text, StyleSheet, ImageBackground, ScrollView, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import NavigationBar from '../component/homeNavigation';
 import { Searchbar } from 'react-native-paper';
 import { useRoute } from '@react-navigation/native';
+
+const { width, height } = Dimensions.get('window');
 
 const Home = () => {
   const Navigation = useNavigation();
@@ -69,7 +71,7 @@ const styles = StyleSheet.create({
   },
   searchButtonText: {
     color: 'white',
-    fontSize: 18,
+    fontSize: 28,
     fontWeight: 'bold',
   },
 });
