@@ -1,6 +1,6 @@
 // UserProfileScreen.js
 import React, {useState, useEffect} from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { IconButton } from 'react-native-paper';
@@ -16,6 +16,7 @@ const GoogleMapSearchProfile = () => {
         location: '',
         contact_number: '',
         email: '',
+        images: [], // Initialize images as an array
     });
 
     const route = useRoute();
@@ -25,28 +26,36 @@ const GoogleMapSearchProfile = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`http://192.168.1.5:3000/api/profile/${user_id}`);
-                console.log(response.data);
+                const response = await axios.get(`http://192.168.1.5:3000/api/single-profile/${user_id}`);
+                
+                console.log(response.data.data.url); // Add this line to check the image URLs
+                
+                const images = response.data.data.url && Array.isArray(response.data.data.url)
+                    ? response.data.data.url.filter(url => typeof url === 'string' && url.trim() !== '')
+                    : [];
+    
                 setData({
-                    name: response.data.name,
-                    role: response.data.role,
-                    contact_number: response.data.contact_number,
-                    location: response.data.location,
-                    email: response.data.email,
+                    name: response.data.data.name,
+                    role: response.data.data.role,
+                    contact_number: response.data.data.contact_number,
+                    location: response.data.data.location,
+                    email: response.data.data,
+                    images: images,
                 });
+    
+                console.log(response.data);
             } catch (error) {
                 console.log(error.data);
             }
         };
-
+    
         fetchData(); // Call the function to fetch data when the component mounts
-    }, [user_id]); // Add user_id as a dependency to re-run the effect when it changes
-
-
+    }, [user_id]);
+    
 
 
     const handleSample = () => {
-        // console.log(user_id)
+        // console.log(response.data)
     };
 
     const handleBackPress = () => {
@@ -117,8 +126,14 @@ const GoogleMapSearchProfile = () => {
                         </TouchableOpacity>
                     </View>
                 </View>
+                <View style={styles.displayImages}>
+                {console.log(data.images)}
+                {data.images.map((image, index) => (
+                   
+                    <Image key={index} source={{ uri: image }} style={styles.showImages} />
+                ))}
             </View>
-            {/* Add your user profile content here */}
+            </View>
         </SafeAreaView>
     );
 };
@@ -286,6 +301,14 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginRight: '2%',
     },
+    showImages: {
+        width: "100%",
+        height: 200, // Set the height according to your design
+        resizeMode: "cover",
+        borderRadius: 10,
+        marginBottom: 10,
+    },
+    
 
 });
 

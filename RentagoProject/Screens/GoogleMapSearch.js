@@ -80,7 +80,7 @@ const GoogleMapSearch = () => {
   const handlePlaceSelected = (details) => {
     if (details && details.geometry && details.geometry.location) {
       const { location } = details.geometry;
-  
+
       // Make sure location object has 'lat' and 'lng' properties
       if (location && location.lat && location.lng) {
         const newRegion = {

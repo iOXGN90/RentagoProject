@@ -22,10 +22,10 @@ class UserController extends Controller
 {
     $usersInfoWithImages = DB::table('users')
             ->join('locations', 'users.id', '=', 'locations.user_id')
-            ->join('multi_images', 'locations.id', '=', 'multi_images.id')
+            ->join('multi_images', 'locations.id', '=', 'multi_images.location_id')
             ->where('users.id', '=', $id)
             ->select('users.*', 'locations.id', 'multi_images.url')
-            ->get();
+            ->first();
 
         return response()->json(['data' => $usersInfoWithImages]);
 }

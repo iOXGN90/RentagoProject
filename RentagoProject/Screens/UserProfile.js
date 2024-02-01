@@ -62,7 +62,7 @@ const UserProfileScreen = () => {
     };
 
     return (
-        <SafeAreaView style={styles.body}>
+        <View style={styles.body}>
             <ImageBackground
                 source={{ uri: 'https://i.ibb.co/D5bKCFL/background.png' }}  // Placeholder
                 style={styles.imageBackground}
@@ -128,18 +128,19 @@ const UserProfileScreen = () => {
             </View>
             </ImageBackground>
             {/* Add your user profile content here */}
-        </SafeAreaView>
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
     body: {
         backgroundColor:"#E8EAED",
+        // marginTop: width * 0.1,
         width: "100%",
         height: "100%",
     },
     userProfile_navBar:{
-        marginTop: "2%",
+        marginTop: height * 0.05,
         width: "100%",
         height: "5%",
         flexDirection: "row",

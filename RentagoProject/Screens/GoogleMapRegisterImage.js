@@ -24,18 +24,19 @@ const Test = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleChooseImage = async () => {
-  let result = await ImagePicker.launchImageLibraryAsync({
-    mediaTypes: ImagePicker.MediaTypeOptions.Images,
-    allowsMultipleSelection: true,
-    aspect: [4, 3],
-    quality: 1,
-  });
-
-  if (!result.cancelled) {
-    // Append the newly selected images to the existing ones
-    setSelectedImages((prevImages) => [...prevImages, ...result.assets]);
-  }
-};
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsMultipleSelection: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+  
+    if (!result.canceled) { // Update the key from "cancelled" to "canceled"
+      // Append the newly selected images to the existing ones
+      setSelectedImages((prevImages) => [...prevImages, ...result.assets]);
+    }
+  };
+  
   const handleRemoveImage = (index) => {
     const updatedImages = [...selectedImages];
     updatedImages.splice(index, 1);

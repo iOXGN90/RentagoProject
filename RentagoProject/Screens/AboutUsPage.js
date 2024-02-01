@@ -14,7 +14,6 @@ const AboutUs = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.navigation}>
           <View style={styles.leftNav}>
             <TouchableOpacity onPress={handleBackPress} style={styles.goBackButton}>
@@ -28,7 +27,8 @@ const AboutUs = () => {
             <Text style={styles.headerText}>About Us</Text>
           </View>
           <View style={styles.rightNav}>{/* future use */}</View>
-        </View>  
+        </View> 
+      <ScrollView contentContainerStyle={styles.scrollContainer}> 
         <Image
           source={require('../assets/rentago.png')} // Change the path accordingly
           style={styles.image}
@@ -43,11 +43,11 @@ const AboutUs = () => {
         </Text>
         <Text style={styles.creaditsHeader}>App Developed by: </Text>
         <Text style={styles.credits}>
-         Jhorne Bhoy D. Acenas{'\n'}
-         Nevin Harold D. Cabarrubias{'\n'}
-         John Dwight L. Paye{'\n'}
-         John Mark U. Tingcay{'\n'}
-         </Text>
+          Jhorne Bhoy D. Acenas{'\n'}
+          Nevin Harold D. Cabarrubias{'\n'}
+          John Dwight L. Paye{'\n'}
+          John Mark U. Tingcay{'\n'}
+        </Text>
       </ScrollView>
     </SafeAreaView>
   );
@@ -65,11 +65,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   navigation: {
-    top: 30,
     width: "100%",
     height: "5%",
     flexDirection: "row",
   },
+
   leftNav: {
     flex: 1,
     justifyContent: "center",

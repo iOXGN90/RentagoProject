@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
-import LoginPage from './Screens/Login_Prototype';
+import LoginPage from './Screens/Login';
 import SignupPage from './Screens/SignupPage';
 import UserProfilePage from './Screens/UserProfile';
 import UserProfileSettingsPage from './Screens/UserProfileSettings';
@@ -16,7 +16,6 @@ import GoogleMapSearch from './Screens/GoogleMapSearch';
 import GoogleMapRegisterImageConfirmation from './Screens/GoogleMapRegisterImageConfirmation'
 import GoogleMapSearchProfile from './Screens/GoogleMapSearchProfile'
 import AboutUs from './Screens/AboutUsPage';
-import sample from './Screens/sample'
 import Test from './Screens/Test'
 
 const Stack = createNativeStackNavigator();
@@ -32,7 +31,6 @@ return (
             }}
         >
             <Stack.Screen name="Test" component={Test} />
-            <Stack.Screen name="Sample" component={sample} />
             <Stack.Screen name="Login" component={LoginPage} />
             <Stack.Screen name="Home" component={HomePage} />
             <Stack.Screen name="GoogleMapRegister" component={GoogleMapRegisterSelectPlace} />

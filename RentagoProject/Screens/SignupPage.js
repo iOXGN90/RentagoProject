@@ -110,15 +110,17 @@ const SignupPage = () => {
       <View style={styles.Body}>
         <Formik
           style={styles.Container}
-          initialValues={{
-            name: '',
-            role: '',
-            contact_number: '',
-            location: '',
-            email: '',
-            password: '',
-            confirmPassword: '',
-          }}
+          initialValues={
+            {
+              name: '',
+              role: '',
+              contact_number: '',
+              location: '',
+              email: '',
+              password: '',
+              confirmPassword: '',
+            }
+          }
           validationSchema={SignupSchema}
           onSubmit={handleSignup}
         >
