@@ -26,7 +26,7 @@ const GoogleMapSearchProfile = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`http://192.168.1.5:3000/api/single-profile/${user_id}`);
+                const response = await axios.get(`http://192.168.1.7:3000/api/single-profile/${user_id}`);
                 
                 console.log(response.data.data.url); // Add this line to check the image URLs
                 
@@ -127,12 +127,10 @@ const GoogleMapSearchProfile = () => {
                     </View>
                 </View>
                 <View style={styles.displayImages}>
-                {console.log(data.images)}
-                {data.images.map((image, index) => (
-                   
-                    <Image key={index} source={{ uri: image }} style={styles.showImages} />
-                ))}
-            </View>
+                    {data.images.map((images, index) => (
+                        <Image key={index} source={{ uri: `http://192.168.1.7:3000/${images}` }} style={styles.showImages} />
+                    ))}
+                </View>
             </View>
         </SafeAreaView>
     );

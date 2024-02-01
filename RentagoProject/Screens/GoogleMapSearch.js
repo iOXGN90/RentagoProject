@@ -31,7 +31,7 @@ const GoogleMapSearch = () => {
   useEffect(() => {
     // Fetch positions using Axios
     axios
-      .get('http://192.168.1.5:3000/api/find-location', {
+      .get('http://192.168.1.7:3000/api/find-location', {
         headers: {
           Accept: 'application/json',
         },

@@ -1,64 +1,57 @@
-import React from 'react';
-import { View, Button } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
+import React, { useState, useEffect } from 'react';
+import { View, Image, StyleSheet } from 'react-native';
 import axios from 'axios';
 
-export default function Test() {
-  const handleImageUpload = async () => {
-    // Get permission to access the photo library
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-      console.error('Permission to access photo library denied');
-      return;
-    }
+const ImageFetcher = () => {
+  const [images, setImages] = useState([]);
 
-    // Launch the image picker
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    if (!result.cancelled) {
-      const requestData = {
-        user_id: 1, // Replace with your user ID
-        long: 12312, // Replace with your longitude
-        lat: 123123,   // Replace with your latitude
-        address: 'amang', // Replace with your address
-        description: '2323', // Replace with your description
-        price: '9232',     // Replace with your price
-      };
-
-      const formData = new FormData();
-      Object.entries(requestData).forEach(([key, value]) => {
-        formData.append(key, value);
-      });
-
-      formData.append('image', {
-        uri: result.uri,
-        type: 'image/jpeg',
-        name: 'myImage',
-      });
-
+  useEffect(() => {
+    const fetchImages = async () => {
       try {
-        // Make the POST request to your API endpoint
-        let response = await axios.post('http://192.168.1.5:3000/api/store-location', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-        console.log('Image uploaded!', response.data);
+        const response = await axios.get(`http://192.168.1.7:3000/api/single-profile/${10}`);
+        
+        // Check if response.data.data.url is an array before setting state
+        if (Array.isArray(response.data.data.url)) {
+          setImages(response.data.data.url);
+        } else if (response.data.data.url === '[]') {
+          // If url is a string representation of an empty array, set images as an empty array
+          setImages([]);
+        } else {
+          console.error('Invalid response format - expected an array');
+        }
       } catch (error) {
-        // console.error('Error uploading image:', error);
+        console.error('Error fetching images:', error);
       }
-    }
-  };
+    };
+
+    fetchImages();
+  }, []); // Empty dependency array to fetch images only once on component mount
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      {/* Other components */}
-      <Button title="Upload Image" onPress={handleImageUpload} />
+    <View style={styles.container}>
+      {images && images.map((image, index) => (
+        <Image
+          key={index}
+          source={{ uri: image }}
+          style={styles.image}
+        />
+      ))}
     </View>
   );
-}
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  image: {
+    width: 200,
+    height: 200,
+    marginVertical: 10,
+    borderRadius: 10,
+  },
+});
+
+export default ImageFetcher;

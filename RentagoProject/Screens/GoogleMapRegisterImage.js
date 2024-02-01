@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, Dimensions, TouchableOpacity, Text, Image, Alert } from 'react-native';
+import { View, StyleSheet, ScrollView, Dimensions, TouchableOpacity, Text, Image, Alert, ActivityIndicator } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
@@ -17,9 +17,6 @@ const Test = () => {
   const updatedInformation = route.params?.updatedRegisterInfo;
   const userInfoFromLogin = route.params?.userInfo;
 
-  const sample = () => {
-    console.log(updatedInformation)
-  }
   const [selectedImages, setSelectedImages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -90,7 +87,7 @@ const Test = () => {
 
     try {
       // Make the POST request to your API endpoint
-      let response = await axios.post('http://192.168.1.5:3000/api/store-location', 
+      let response = await axios.post('http://192.168.1.7:3000/api/store-location', 
       // 'http://10.0.0.53:3000/api/store-location',
       formData, {
         headers: {
@@ -105,7 +102,6 @@ const Test = () => {
       Navigation.navigate('GoogleMapRegisterImageConfirmation', {
         userInfo: userInfoFromLogin
       })
-
     }
   };
 
@@ -143,13 +139,17 @@ const Test = () => {
           <TouchableOpacity
             style={[
               styles.uploadImageButtonWrapper,
-              { backgroundColor: selectedImages.length === 0 || isLoading ? '#A9A9A9' : '#55bCF6' },
+              { backgroundColor: selectedImages.length === 0 || isLoading },
             ]}
             onPress={handleImageUpload}
             disabled={selectedImages.length === 0 || isLoading}>
-            <Text style={styles.uploadImageButton}>
-              {isLoading ? 'Uploading...' : 'Upload Image'}
-            </Text>
+            {isLoading ? (
+              <ActivityIndicator size="small" color="#ffffff" />
+            ) : (
+              <Text style={styles.uploadImageButton}>
+                Upload Image
+              </Text>
+            )}
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -277,7 +277,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 25,
   },
-
 })
 
 

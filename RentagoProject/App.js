@@ -24,7 +24,7 @@ export default function App() {
 return (
     <NavigationContainer>
         <Stack.Navigator
-            initialRouteName="Login"
+            initialRouteName="GoogleMapSearch"
             screenOptions={{
                 headerShown: false,
                 animation: 'slide_from_right', // Set the animation option
