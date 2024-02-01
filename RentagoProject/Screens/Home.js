@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { TouchableOpacity, View, Text, StyleSheet, ImageBackground, ScrollView, Image } from 'react-native';
+import { TouchableOpacity, View, Text, StyleSheet, ImageBackground, ScrollView, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import NavigationBar from '../component/homeNavigation';
 import { Searchbar } from 'react-native-paper';
 import { useRoute } from '@react-navigation/native';
+
+const { width, height } = Dimensions.get('window');
 
 const Home = () => {
   const Navigation = useNavigation();
@@ -16,78 +18,61 @@ const Home = () => {
   const userInfoFromLogin = route.params?.userInfo;
 
   const handleSearch = () => {
-    // Navigate to 'GoogleMap' screen when search button is pressed
+    // Navigate to 'GoogleMap' screen when the search button is pressed
     Navigation.navigate('GoogleMapSearch');
   };
 
   return (
-    <View style={styles.body}>
-      <NavigationBar token={tokenFromLogin} userInfo={userInfoFromLogin} />
-      <ScrollView style={styles.scrollingContent} showsVerticalScrollIndicator={false}>
-        <View style={styles.imageWrapper}>
-          <Image 
-            source={require('../assets/Login/rentago1.png')} 
-            style={styles.loginImage}
-          />
-          <Text>Alpha Version</Text>
-        </View>
-        <View style={styles.content}>
-          <TouchableOpacity onPress={handleSearch} style={styles.searchBarContainer}>
-            <Text style={styles.searchText} >Search</Text>
+    <View style={styles.container}>
+      <ImageBackground
+        source={{ uri: 'https://i.ibb.co/D5bKCFL/background.png' }}  // Placeholder
+        style={styles.imageBackground}
+      >
+        <NavigationBar style={{
+          
+        }}
+        token={tokenFromLogin} userInfo={userInfoFromLogin} />
+
+        <View style={styles.contentContainer} showsVerticalScrollIndicator={false}>
+          <TouchableOpacity onPress={handleSearch} style={styles.searchButton}>
+            <Text style={styles.searchButtonText}>Search</Text>
           </TouchableOpacity>
-          {/* <View style={styles.featuredContent}>
-            <Content />
-          </View> */}
         </View>
-      </ScrollView>
+      </ImageBackground>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  body: {
-    // futureUse
-  },
-  imageWrapper: {
-    width: "100%",
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  loginImage: {
-    resizeMode: 'cover',
-    marginTop: '30%',
-    width: 300,
-    height: 200,
-  },
-  scrollingContent: {
-    // futureUse
-  },
-  content: {
-    width: "100%",
-    height: "auto",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  searchBarContainer: {
-    width: "95%",
-    height: 790,
-    // position: 'absolute',
-    alignItems: "center",
-    justifyContent: "center",
-    // backgroundColor: 'blue',
-  },
-  searchBarDesign: {
-    width: "100%",
-    borderRadius: 50,
-    height: "10%",
-    elevation: 10,
-    marginTop: "50%",
-  },
-  featuredContent: {
-    height: 400,
+  container: {
+    flex: 1,
+    backgroundColor:'white',
   },
   imageBackground: {
-    width: "100%",
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+  },
+  contentContainer: {
+    // flex: 1,
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    height: '90%',
+    // backgroundColor:'red',
+    justifyContent:"center",
+
+  },
+  searchButton: {
+    backgroundColor: '#05a3fc',
+    padding: 15,
+    borderRadius: 30,
+    alignItems: 'center',
+    elevation: 10,
+  },
+  searchButtonText: {
+    color: 'white',
+    fontSize: 28,
+    fontWeight: 'bold',
   },
 });
 

@@ -18,11 +18,14 @@ const homeNavigation = ({token, userInfo}) => {
     return (
         <SafeAreaView style={styles.Container}>
             <View style={styles.leftNav}>
-                {/* contents here for left part of navigation */}
+                <Image source={require('../assets/home/rentago_cropped.png')} style={styles.logo}/>
+                <Text style={styles.logoText}>
+                    Alpha
+                </Text>
             </View>
             <View style={styles.rightNav}>
                 <TouchableOpacity onPress={handleUserImagePress} style={styles.userImageButton}>
-                    <Image source={require('../assets/navigation/account-circle.png')} style={styles.userImage}/>
+                    <Image source={require('../assets/home/arthur.jpg')} style={styles.userImage}/>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>
@@ -34,17 +37,29 @@ const styles = StyleSheet.create({
         width: "100%",
         height: "10%",
         flexDirection: "row",
-        marginTop: "1%",
-        // backgroundColor: "blue",
+        // backgroundColor:'red',
     },
     leftNav:{
         width: "50%",
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        // padding: 10,
         // backgroundColor: "brown",
     },
+    logo:{
+        width: 100,
+        height: 27,
+        
+    },
+    logoText:{
+        fontWeight: 'bold',
+        marginRight: 30,
+    },
+
 
     rightNav:{
         width: "50%",
-        height: "100%",
         alignItems: "flex-end",
         justifyContent: "center",
         padding: 15,
@@ -56,6 +71,7 @@ const styles = StyleSheet.create({
         borderRadius: 100,
         elevation: 5,
     },
+
 
     userImage:{
         width: 40,

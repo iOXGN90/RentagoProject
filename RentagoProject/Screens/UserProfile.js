@@ -1,12 +1,14 @@
 // UserProfileScreen.js
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Alert, ImageBackground, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { IconButton } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons'; // Import the appropriate icon
 import { useRoute } from '@react-navigation/native';
 
+
+const { width, height } = Dimensions.get('window');
 
 const UserProfileScreen = () => {
     const route = useRoute();
@@ -26,27 +28,27 @@ const UserProfileScreen = () => {
     const handleSample = () => {
         // Display an alert to ask for location permission
         Alert.alert(
-          'Location Permission',
-          'This feature will use your current location.',
-          [
+            'Location Permission',
+            'This feature will use your current location.',
+            [
             {
-              text: 'Cancel',
-              style: 'cancel',
-              onPress: () => {
-                console.log('Location permission denied');
-              },
+                text: 'Cancel',
+                style: 'cancel',
+                onPress: () => {
+                    console.log('Location permission denied');
+                },
             },
             {
-              text: 'Allow',
-              onPress: async () => {
-                console.log('Location permission granted');
-                // Continue with the logic, e.g., navigating to 'GoogleMap'
-                Navigation.navigate('GoogleMap', {userInfo : userInfoFromLogin});
-              },
+            text: 'Okay',
+                onPress: async () => {
+                    console.log('Location permission granted');
+                    // Continue with the logic, e.g., navigating to 'GoogleMap'
+                    Navigation.navigate('GoogleMapRegister', {userInfo : userInfoFromLogin});
+                },
             },
-          ]
+            ]
         );
-      };
+        };
 
     const handleBackPress = () => {
         Navigation.goBack(); // Go back to the previous screen with the transition effect
@@ -60,7 +62,11 @@ const UserProfileScreen = () => {
     };
 
     return (
-        <SafeAreaView style={styles.body}>
+        <View style={styles.body}>
+            <ImageBackground
+                source={{ uri: 'https://i.ibb.co/D5bKCFL/background.png' }}  // Placeholder
+                style={styles.imageBackground}
+            >
             <View style={styles.userProfile_navBar}>
                 <View style={styles.userProfile_leftNavBar}>
                     <TouchableOpacity onPress={handleBackPress} style={styles.goBackButton}>
@@ -89,12 +95,6 @@ const UserProfileScreen = () => {
                     <Text style={styles.userName}>
                         {userName}
                     </Text>
-                    <Text>
-                        Contact Number:
-                    </Text>
-                    <Text style={styles.userName}>
-                        {userContactNumber}
-                    </Text>
                     <View style={styles.companyWrapper}>
                         <Text style={styles.userRole}>
                             {userRole}
@@ -109,12 +109,15 @@ const UserProfileScreen = () => {
                             {userLocation}
                         </Text>
                     </View>
+                    <View style={styles.contactWrapper}>
+                        <Text style={styles.contactText}>
+                            Contact Number:
+                        </Text>
+                        <Text style={styles.contactText}>
+                            {userContactNumber}
+                        </Text>
+                    </View>
                     <View style={styles.userOption}>
-                        <TouchableOpacity style={styles.optionButton} onPress={handleSample}>
-                            <Text style={styles.optionProfileText}>
-                                Test
-                            </Text>
-                        </TouchableOpacity>
                         <TouchableOpacity style={styles.optionButton} onPress={handleSample}>
                             <Text style={styles.optionProfileText}>
                                 Register a place
@@ -123,19 +126,21 @@ const UserProfileScreen = () => {
                     </View>
                 </View>
             </View>
+            </ImageBackground>
             {/* Add your user profile content here */}
-        </SafeAreaView>
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
     body: {
         backgroundColor:"#E8EAED",
+        // marginTop: width * 0.1,
         width: "100%",
         height: "100%",
     },
     userProfile_navBar:{
-        marginTop: "2%",
+        marginTop: height * 0.05,
         width: "100%",
         height: "5%",
         flexDirection: "row",
@@ -218,7 +223,7 @@ const styles = StyleSheet.create({
         width: "60%",
         borderRadius: 1000,
         borderWidth: 5,
-        borderColor: "#05a3fc",
+        borderColor: "white",
     },
     userInformation:{
         marginTop: "5%",
@@ -265,21 +270,36 @@ const styles = StyleSheet.create({
         // marginLeft: "1%",
     },
     userOption:{
-        width: "50%",
+        width: width * 1,
+        // backgroundColor: 'blue',
         flexDirection: "row",
+        justifyContent: 'center',
+        alignItems:'center',
     },
     optionButton:{
         marginTop: "10%",
-        padding: "7%",
+        width: width * 0.9,
+        // padding: 15,
+        paddingVertical: 30,
         margin: "2%",
+        alignItems: 'center',
         backgroundColor: "#05a3fc",
         borderRadius: 100,
     },
 
     optionProfileText:{
+        // width: width * 0.5,
         fontWeight: "bold",
-        fontSize: 20,
+        fontSize: 28,
         color: "white",
+    },
+    contactWrapper:{
+        flexDirection: 'row'
+    },
+
+    contactText:{
+        fontSize: 20,
+        marginRight: '2%',
     },
 
 });

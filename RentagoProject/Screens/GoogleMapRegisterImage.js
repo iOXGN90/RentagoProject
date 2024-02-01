@@ -1,184 +1,283 @@
 import React, { useState } from 'react';
-import { View, Button, Image, TextInput, StyleSheet, Text} from 'react-native';
+import { View, StyleSheet, ScrollView, Dimensions, TouchableOpacity, Text, Image, Alert, ActivityIndicator } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
 import { useRoute } from '@react-navigation/native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 
-const ImageUpload = () => {
-  const [images, setImages] = useState([]);
-  const [imageUrl, setImageUrl] = useState('');
-  const [locationData, setLocationData] = useState({
-    long: '',
-    lat: '',
-    address: '',
-    description: '',
-    url: '',
-  });
+const WIDTH = Dimensions.get("window").width;
+const HEIGHT = Dimensions.get("window").height;
 
-  
+const Test = () => {
+
+  const Navigation = useNavigation();
   const route = useRoute();
 
+  const updatedInformation = route.params?.updatedRegisterInfo;
   const userInfoFromLogin = route.params?.userInfo;
-  const coordinatesFromGoogleMap = route.params?.coordinate;
 
-  console.log('FormData:', JSON.stringify(userInfoFromLogin));
-  console.log('FormData:', JSON.stringify(coordinatesFromGoogleMap));
+  const [selectedImages, setSelectedImages] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleTest = () =>{
-    console.log(JSON.stringify('User\'s ID : '+ userInfoFromLogin.id));
-    console.log(JSON.stringify('Longitude: ' + coordinatesFromGoogleMap.longitude));
-    console.log(JSON.stringify('Latitude: ' + coordinatesFromGoogleMap.latitude));
-  }
-
-  const handleImageUpload = async () => {
-    const formData = new FormData();
-    formData.append('long', locationData.long);
-    formData.append('lat', locationData.lat);
-    formData.append('address', locationData.address);
-    formData.append('description', locationData.description);
-    formData.append('user_id', '1'); // replace '1' with the actual user ID
-
-    // Assuming 'url' is the key for your image files array
-    images.forEach((image, index) => {
-      formData.append(`url[${index}]`, {
-        uri: image.uri,
-        type: 'image/jpeg',
-        name: `image_${index}.jpg`,
-      });
+  const handleChooseImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsMultipleSelection: true,
+      aspect: [4, 3],
+      quality: 1,
     });
-
-    console.log('FormData:', JSON.stringify(formData));
-    try {
-      const response = await axios.post('https://192.168.1.5:3000/api/store-location', formData, {
-        headers: {
-          'Accept': 'application/json',
-        },
-      });
-    
-      setImageUrl(response.data); // assuming 'url' is the key for the image URL
-    } catch (error) {
-      console.error('An error occurred', error);
+  
+    if (!result.canceled) { // Update the key from "cancelled" to "canceled"
+      // Append the newly selected images to the existing ones
+      setSelectedImages((prevImages) => [...prevImages, ...result.assets]);
     }
   };
+  
+  const handleRemoveImage = (index) => {
+    const updatedImages = [...selectedImages];
+    updatedImages.splice(index, 1);
+    setSelectedImages(updatedImages);
+  };
 
-  const handleImageSelect = async () => {
-    // No permissions request is necessary for launching the image library
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [9, 16],
-      quality: 1,
-      multiple: true, // Allow multiple image selection
+  const handleImageUpload = async () => {
+    const minImages = 5;
+    const maxImages = 10;
+  
+    if (selectedImages.length < minImages || selectedImages.length > maxImages) {
+      // Alert the user or handle the case where the number of images is not within the required range
+      Alert.alert(
+        'Invalid Number of Images',
+        `Please select between ${minImages} and ${maxImages} images.`,
+      );
+      return;
+    }
+  
+    setIsLoading(true);
+  
+    const formData = new FormData();
+  
+    // Define requestData here or get it from somewhere
+    const requestData = {
+      id: updatedInformation.id,
+      long: updatedInformation.longitude,
+      lat: updatedInformation.latitude,
+      address: updatedInformation.address,
+      description: updatedInformation.description,
+      price: updatedInformation.price,
+    };
+
+    // Add other form fields
+    formData.append('user_id', requestData.id);
+    formData.append('long', requestData.long);
+    formData.append('lat', requestData.lat);
+    formData.append('address', requestData.address);
+    formData.append('description', requestData.description);
+    formData.append('price', requestData.price);
+  
+    // Handle array of files from selectedImages
+    selectedImages.forEach((file, index) => {
+      const timestamp = Date.now(); // Generate a unique timestamp
+      formData.append(`url[${index}]`, {
+        uri: file.uri,
+        type: 'image/jpeg',
+        name: `Image_from_Android_${timestamp}_${index}.jpg`, // Include timestamp in the file name
+      });
     });
 
-    console.log(result);
-
-    if (!result.cancelled) {
-      setImages(result.assets);
+    try {
+      // Make the POST request to your API endpoint
+      let response = await axios.post('http://192.168.1.7:3000/api/store-location', 
+      // 'http://10.0.0.53:3000/api/store-location',
+      formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log('Image uploaded!', response.data);
+    } catch (error) {
+      // console.error('Error uploading image:', error);
+    } finally {
+      setIsLoading(false);
+      Navigation.navigate('GoogleMapRegisterImageConfirmation', {
+        userInfo: userInfoFromLogin
+      })
     }
   };
 
   return (
-    <SafeAreaView style={styles.body}>
-      <View style={styles.headerWrapper}>
+    <ScrollView>
+      <SafeAreaView style={styles.body}>
         <View style={styles.imageWrapper}>
-          <Image 
-              source={require('../assets/google/test.png')} 
-              style={styles.registerImage}
-          />
-          <Text  style={styles.headerText}>
-            We're almost there, please provide information for the registered location
+          <Image source={require('../assets/google/almostThere.png')} style={styles.registerImage} />
+        </View>
+        <View style={styles.headerTextWrapper}>
+          <Text style={styles.headerText}>
+            We're almost there, you are required to upload images of the place!
           </Text>
         </View>
-        <View style={styles.inputWrapper}>
-          <View style={styles.inputTextWrapper}>
-            <TextInput
-              style={styles.inputText}
-              placeholder="Type something..."
-              // onChangeText={(text) => setInputText(text)}
-              // value={inputText}
-            />
-          </View>
-
+        <View style={styles.selectedImagesWrapper}>
+          {selectedImages.map((image, index) => (
+            <View key={index} style={styles.selectedImageContainer}>
+              <Image source={{ uri: image.uri }} style={styles.selectedImage} />
+              <TouchableOpacity
+                style={styles.removeImageButton}
+                onPress={() => handleRemoveImage(index)}>
+                <Text style={styles.removeImageButtonText}>
+                  Remove
+                </Text>
+              </TouchableOpacity>
+            </View>
+          ))}
         </View>
-      </View>
-
-
-
-
-      {/* <Button title="Select Image" onPress={handleTest} />
-      {images.map((image, index) => (
-        <Image key={index} source={{ uri: image.uri }} style={{ width: 200, height: 200 }} />
-      ))}
-
-      <Button title="Upload Image" onPress={handleImageUpload} />
-      {imageUrl && <TextInput value={imageUrl} editable={false} />} */}
-    </SafeAreaView>
+        <View style={styles.uploadImagesWrapper}>
+          <TouchableOpacity style={styles.selectImageButtonWrapper} onPress={handleChooseImage}>
+            <Text style={styles.selectImageButton}>
+              Select Image
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.uploadImageButtonWrapper,
+              { backgroundColor: selectedImages.length === 0 || isLoading },
+            ]}
+            onPress={handleImageUpload}
+            disabled={selectedImages.length === 0 || isLoading}>
+            {isLoading ? (
+              <ActivityIndicator size="small" color="#ffffff" />
+            ) : (
+              <Text style={styles.uploadImageButton}>
+                Upload Image
+              </Text>
+            )}
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   body: {
-    height: '100%',
-    width: '100%',
-    // flex: 1,
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white',
-    // justifyContent: 'center',
   },
-  imageWrapper:{
-    width: '100%',
-    height: '150%',
+
+  imageWrapper: {
+    width: WIDTH * 0.95,
+    height: HEIGHT * 0.63,
     alignItems: 'center',
-    padding: 10,
-    borderRadius: 50,
+    justifyContent: 'center',
+    borderRadius: 30,
     elevation: 10,
-    // backgroundColor: 'blue',
+    backgroundColor: '#55bCF6',
+    borderWidth: 5,
+    borderColor: 'violet',
   },
-  registerImage:{
-    width: '100%',
-    height: '180%',
+
+  registerImage: {
+    width: WIDTH * 0.95,
+    height: HEIGHT * 0.6,
     borderRadius: 40,
   },
 
-  headerWrapper:{
-    width: '100%',
-    height: '20%',
-    // backgroundColor: 'red',
+  headerTextWrapper: {
+    marginTop: HEIGHT * 0.01,
+    width: '95%',
+    paddingBottom: 30,
+    borderBottomWidth: 0.3,
+    padding: 10,
+    borderRadius: 5,
   },
-  headerText:{
-    width: '90%',
-    fontSize: 30,
+
+  headerText: {
+    fontSize: 28,
     textAlign: 'center',
-    fontWeight: 'normal',
-    // marginTop: '5%',
   },
 
-  inputWrapper:{
+  selectedImagesWrapper: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginVertical: 25,
+  },
+
+  selectedImage: {
+    width: WIDTH * 0.4,
+    height: HEIGHT * 0.3,
+    margin: 5,
+    borderRadius: 15,
+  },
+
+  selectedImageContainer:{
     alignItems: 'center',
-    marginTop: '70%',
-    width: '100%',
-    height: '50%',
-    // elevation: 10,
-    // borderWidth: 0.5,
-    // backgroundColor: 'gray',
+    justifyContent: 'center',
+    // backgroundColor: 'blue',
+    borderWidth: 0.1,
+    margin: 15,
+    borderRadius:5,
+
   },
-  inputTextWrapper:{
+
+  removeImageButton: {
     backgroundColor: 'blue',
-    width: '70%',
-    borderRadius: 100,
+    // position: 'absolute',
+    // top: 5,
+    // right: 5,
+    backgroundColor: 'red',
+    // padding: 10,
+    margin: 10,
+    height: HEIGHT*0.03,
+    width: WIDTH*0.2,
+    borderRadius: 15,
+    justifyContent: 'center',
+  },
+
+  removeImageButtonText: {
+    color: 'white',
+    fontSize: 18,
+    textAlign: 'center',
+  },
+
+  uploadImagesWrapper: {
+    height: HEIGHT * 0.2,
+    width: WIDTH * 1,
+    alignItems: 'center',
+  },
+
+  selectImageButtonWrapper: {
+    width: WIDTH * 0.95,
+    padding: 15,
+    marginTop: 20,
+    backgroundColor: '#55bCF6',
+    borderRadius: 30,
     elevation: 10,
-    
-  },
-  
-  inputText:{
-    borderRadius: 20,
-    width: '70%',
-    height: 100,
-    // backgroundColor: 'pink'
   },
 
-});
+  uploadImageButtonWrapper: {
+    width: WIDTH * 0.95,
+    padding: 15,
+    marginTop: 10,
+    backgroundColor: '#55bCF6',
+    borderRadius: 30,
+    elevation: 10,
+  },
 
-export default ImageUpload;
+  selectImageButton: {
+    textAlign: 'center',
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 25,
+  },
+
+  uploadImageButton: {
+    textAlign: 'center',
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 25,
+  },
+})
+
+
+export default Test;

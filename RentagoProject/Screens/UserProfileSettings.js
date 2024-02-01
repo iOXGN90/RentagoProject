@@ -1,14 +1,14 @@
-import React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, Image, Alert, } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import {useNavigation} from '@react-navigation/native'
+import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 import { IconButton } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons'; // Import the appropriate icon
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'; // Import MaterialCommunityIcons
 import { useRoute } from '@react-navigation/native';
 import axios from 'axios';
 
 const UserProfileSettings = () => {
-
   const navigation = useNavigation();
 
   const handleBackPress = () => {
@@ -37,8 +37,9 @@ const UserProfileSettings = () => {
           {
             text: 'Yes',
             onPress: async () => {
-              const YOUR_LOGOUT_API_ENDPOINT = 'http://192.168.1.5:3000/api/logout';
-              console.log('Token Deleted: ' + userToken)
+              const YOUR_LOGOUT_API_ENDPOINT = 'http://192.168.1.7:3000/api/logout';
+          // 'http://10.0.0.53:3000/api/logout';
+              // console.log('Token Deleted: ' + userToken);
               const response = await axios.post(
                 YOUR_LOGOUT_API_ENDPOINT,
                 {},
@@ -51,8 +52,6 @@ const UserProfileSettings = () => {
               );
               if (response.status === 200) {
                 Alert.alert('Logout', 'Logout successful');
-                // Optionally clear the userToken from state
-                // setUserToken(null);
                 navigation.navigate('Login');
               } else {
                 Alert.alert('Logout', 'Logout failed');
@@ -67,26 +66,26 @@ const UserProfileSettings = () => {
     }
   };
 
+  const handleAboutUs = () => {
+    navigation.navigate('AboutUs');
+  };
+
   return (
     <SafeAreaView>
       <View style={styles.body}>
         <View style={styles.navigation}>
-            <View style={styles.leftNav}>
-              <TouchableOpacity onPress={handleBackPress} style={styles.goBackButton}>
-                  <IconButton
-                      icon={() => <Icon name="keyboard-arrow-left" size={50} />} // Use the appropriate icon name
-                      style={styles.goBackButtonIcon}
-                  />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.centerNav}>
-              <Text style={styles.headerText}>
-                  Settings
-              </Text>
-            </View>
-            <View style={styles.rightNav}>
-              {/* future use */}
-            </View>
+          <View style={styles.leftNav}>
+            <TouchableOpacity onPress={handleBackPress} style={styles.goBackButton}>
+              <IconButton
+                icon={() => <Icon name="keyboard-arrow-left" size={50} />} // Use the appropriate icon name
+                style={styles.goBackButtonIcon}
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.centerNav}>
+            <Text style={styles.headerText}>Settings</Text>
+          </View>
+          <View style={styles.rightNav}>{/* future use */}</View>
         </View>
         <View style={styles.content}>
           <View style={styles.leftContent}>
@@ -95,64 +94,80 @@ const UserProfileSettings = () => {
           <View style={styles.middleContent}>
             <TouchableOpacity style={styles.middleContentButtons}>
               <View style={styles.middleContentIcons}>
-                <Image source={require('../assets/navigation/account-circle.png')} style={styles.userImage}/>
-              </View>
-                <Text style={styles.middleContentText}>
-                  Account
-                </Text>
-              <View style={styles.middleContentArrow}>
-
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.middleContentButtons}>
-              <View style={styles.middleContentIcons}>
-                <Image source={require('../assets/profile/notification_icon1.png')} style={styles.userImage}/>
+                <MaterialCommunityIcons name="account" size={40} color="black" />
               </View>
               <Text style={styles.middleContentText}>
-                Notifications
-              </Text> 
-              <View style={styles.middleContentArrow}>
-
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.middleContentButtons}>
-              <View style={styles.middleContentIcons}>
-                <Image source={require('../assets/profile/security.png')} style={styles.userImage}/>
-              </View>
-              <Text style={styles.middleContentText}>
-                Privacy & Security
+                Account
               </Text>
               <View style={styles.middleContentArrow}>
+                <IconButton
+                  icon={() => <Icon name="keyboard-arrow-right" size={50} />} // Use the appropriate icon name
+                  style={styles.middleArrow}
+                />
+              </View>
+              <View style={styles.middleContentArrow}>
+              
               </View>
             </TouchableOpacity>
             <TouchableOpacity style={styles.middleContentButtons}>
               <View style={styles.middleContentIcons}>
-                <Image source={require('../assets/profile/about_us.png')} style={styles.userImage}/>
+                <MaterialCommunityIcons name="bell" size={40} color="black" />
               </View>
-              <Text style={styles.middleContentText}>
-                About us
-              </Text>
+              <Text style={styles.middleContentText}>Notifications</Text>
               <View style={styles.middleContentArrow}>
-
+                <IconButton
+                  icon={() => <Icon name="keyboard-arrow-right" size={50} />} // Use the appropriate icon name
+                  style={styles.middleArrow}
+                />
+              </View>
+              <View style={styles.middleContentArrow}></View>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.middleContentButtons}>
+              <View style={styles.middleContentIcons}>
+                <MaterialCommunityIcons name="lock" size={40} color="black" />
+              </View>
+              <Text style={styles.middleContentText}>Privacy & Security</Text>
+              <View style={styles.middleContentArrow}>
+                <IconButton
+                  icon={() => <Icon name="keyboard-arrow-right" size={50} />} // Use the appropriate icon name
+                  style={styles.middleArrow}
+                />
+              </View>
+              <View style={styles.middleContentArrow}></View>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.middleContentButtons} onPress={handleAboutUs}>
+              <View style={styles.middleContentIcons}>
+                <MaterialCommunityIcons name="information" size={40} color="black" />
+              </View>
+              <Text style={styles.middleContentText}>About Us</Text>
+              <View style={styles.middleContentArrow}>
+                <IconButton
+                  icon={() => <Icon name="keyboard-arrow-right" size={50} />}
+                  style={styles.middleArrow}
+                />
               </View>
             </TouchableOpacity>
             <TouchableOpacity style={styles.middleContentButtons} onPress={handleLogout}>
               <View style={styles.middleContentIcons}>
-                <Image source={require('../assets/profile/logout.png')} style={styles.userImage}/>
+                <MaterialCommunityIcons name="logout" size={40} color="black" />
               </View>
-              <Text style={styles.middleContentText}>
-                Logout
-              </Text>
+              <Text style={styles.middleContentText}>Logout</Text>
+              <View style={styles.middleContentArrow}>
+                <IconButton
+                  icon={() => <Icon name="keyboard-arrow-right" size={50} />} // Use the appropriate icon name
+                  style={styles.middleArrow}
+                />
+              </View>
             </TouchableOpacity>
           </View>
           <View style={styles.rightContent}>
-            {/* space */}
+           {/* space */}
           </View>
         </View>
       </View>
     </SafeAreaView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   body:{
@@ -187,8 +202,6 @@ const styles = StyleSheet.create({
   goBackButtonIcon:{
     borderRadius: 10,
     marginBottom: "25%",
-
-    // backgroundColor: "blue",
   },
   centerNav:{
     width: "33%",
@@ -200,8 +213,6 @@ const styles = StyleSheet.create({
     width: "33%",
     alignItems: "flex-end",
     justifyContent: "center",
-    // marginRight: 30,
-    // backgroundColor: "skyblue",
   },
 
   headerText:{
@@ -212,68 +223,61 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "95%",
     flexDirection: "row",
-    },
+  },
 
   leftContent:{
     width:"10%",
-    // backgroundColor: "pink",
   },
 
   middleContent:{
-    width:"80%",
-    height: "relative",
-    // backgroundColor: "lightblue",
-    flexDirection: "column",
+    width: '80%',
+    flexDirection: 'column',
+    // marginBottom: 0,
+    // backgroundColor: 'gray'
   },
 
   middleContentButtons:{
-    // paddingBottom: "5%",
     borderBottomWidth: 0.2,
     borderColor: "gray",
     alignItems: "center",
-    // marginTop:"15%",
-    // justifyContent: "center",
+    height: '15%',
+    // marginTop:"%",
     width: "100%",
     flexDirection: "row",
-    // backgroundColor: "blue",
-    
+    // backgroundColor: 'red'
   },
 
   middleContentIcons:{
-    width: "15%",
-    height: "15%",
+    width: "20%",
+    height: "40%",
     justifyContent: "center",
-    // backgroundColor: "blue"
-    // borderRightWidth: 0.2,
-    // borderColor: "Gray",
-  },
-
-  userImage:{
-    width: 45,
-    height: 45,
+    // backgroundColor: 'blue'
   },
 
   middleContentText:{
-    
     width: "80%",
     fontWeight: "bold",
     fontSize: 25,
-    // backgroundColor: "gray",
+    // paddingLeft: 30,
+    //  backgroundColor: 'yellow'
   },
 
   middleContentArrow:{
-    width: "50%",
-    backgroundColor: "gray",
+    alignItems: 'center',
+    height: '40%',
+    // backgroundColor: "gray",
   },
-
+  middleArrow:{
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    bottom: 15,
+    right: 20
+    // backgroundColor: 'blue',
+  },
 
   rightContent:{
     width:"10%",
-    // backgroundColor: "green",
-
   },
-
-
-
 })
 export default UserProfileSettings
